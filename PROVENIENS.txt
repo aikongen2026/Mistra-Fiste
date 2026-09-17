@@ -1,0 +1,5 @@
+Technical base: Fiste-guiden-REV27-LIVE-ONE-UPLOAD
+Original app.js SHA256: 0282bc9cff0646fcc90bae4a38da5ad3c07a2d8e2bdeab6431cff6ab4411d823
+Reused: REV27 stylesheet and Leaflet UI architecture; GPS watchPosition pattern, local catch-log and GPX concepts.
+Replaced: marine scoring, source data, river lookup, rule calendar, lure matcher, API layer.
+New app and namespace: Mistra Fiske 1.0.0. No changes to previous archives.

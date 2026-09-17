@@ -1,0 +1,18 @@
+{
+  "name": "mistra-fiske",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mistra river guide derived from Fiste REV27 LIVE",
+  "main": "server.js",
+  "scripts": {
+    "start": "node scripts/verify.js && node server.js",
+    "test": "node --test test/*.test.js",
+    "verify": "node scripts/verify.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "leaflet": "1.9.4"
+  }
+}

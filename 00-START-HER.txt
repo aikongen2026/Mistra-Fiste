@@ -1,0 +1,14 @@
+Mistra Fiske 1.0 - NY APP, IKKE ERSTATT FISTE/VESTFJELLA
+
+1. Opprett nytt GitHub-repo, f.eks. MISTRA-FISKE.
+2. Pakk ut ZIP. Dra ALT INNHOLDET inni Mistra-Fiske-1.0-ONE-UPLOAD til repo-roten. Behold public-, scripts- og test-mappene. Ikke last opp selve ZIP-en.
+3. Commit changes. I Render: New > Web Service > koble det nye repoet.
+4. Build command: npm install --omit=dev
+   Start command: npm start
+   Runtime: Node
+5. Målinger: skaff gratis nøkkel via https://hydapi.nve.no/UserDocumentation/ og sett NVE_API_KEY i Render > Environment. Ingen nøkkel i GitHub.
+6. Valgfritt: MET_USER_AGENT med din kontaktinformasjon.
+7. Åpne Render-adressen. /api/health viser Mistra Fiske 1.0.0. Tillat GPS for Live.
+
+Guide, egne agn, kartoppsett og GPS fungerer uten NVE-nøkkel. Automatiske NVE-målinger gjør ikke det.
+For lokal PC: installer Node.js og dobbeltklikk START-HER.bat. Første oppstart trenger nett for npm install.

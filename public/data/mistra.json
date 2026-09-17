@@ -1,0 +1,465 @@
+{
+  "app": "Mistra Fiske",
+  "version": "1.0.0",
+  "basedOn": "Fiste guiden REV27 LIVE",
+  "checked": "2026-09-18",
+  "map": {
+    "center": [
+      61.775,
+      11.34
+    ],
+    "zoom": 11,
+    "bounds": [
+      [
+        61.68,
+        11.13
+      ],
+      [
+        62.06,
+        11.66
+      ]
+    ],
+    "attribution": "Kartreferanser er utgangspunkt/områder, ikke dokumenterte fiskehøler."
+  },
+  "sources": [
+    {
+      "id": "hooked",
+      "title": "Hooked: Fisketur til Mistra - svær ørret",
+      "url": "https://www.hooked.no/artikler/fisketur-til-mistra-svaer-orret",
+      "kind": "Turreportasje, 31.08.2012. Historisk erfaring, ikke dagens regler.",
+      "summary": "Rønning trekker frem 9 cm wobblere i grønt/grønn-oransje, med flytende eller synkende variant etter plass. Holsbuhølen nevnes, men uten kontrollerbare koordinater. Mellom Nydammen og Gamledammen omtales fluefiske. Mark fiskes aktivt, med søkke ved behov. Reportasjen understreker krevende terreng og tålmodighet; gamle priser og sesongdatoer brukes ikke som regler.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "rules-main",
+      "title": "Mistra Elvelag: gjeldende tilbud og fiskeregler",
+      "url": "https://www.inatur.no/fiske/5aca4566c9f22e00032850cc",
+      "kind": "Rettighetshaver. Tilbudet viser 2026; lenket regel-PDF er merket 2025.",
+      "summary": "Kortområdet går fra brua ved Åkrestrømmen til Gammeldammen nedenfor Søre Mistsjøen. Ørretsesong 1. mai-15. september. Minstemål 30 cm. Til og med 19. august tillates 1 fisk over 40 cm per fisker/døgn; fra 20. august skal all fisk over 40 cm settes ut. Kontroller kort og regler før turen; årsendringer kan forekomme.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "rules-pdf",
+      "title": "Regel-PDF lenket av Mistra Elvelag",
+      "url": "https://inatur.s3-eu-west-1.amazonaws.com/filer/5aca3006c9f22e000328501a/681215ebe2886d796172789e",
+      "kind": "Dokument merket Fiskeregler 2025.",
+      "summary": "Fellesreglene gjelder flere områder. Mistra-appen overfører ikke båt-/redskapsregler for Lomnessjøen til Mistra. Fangst skal rapporteres etter turen. For barn under 16 år oppgir PDF-en unntak fra minstemålet; sjekk selve dokumentet for alle vilkår.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "rules-north",
+      "title": "Østagrenda: Nordre Mistra fiskekort",
+      "url": "https://www.inatur.no/fiske/5a1fb23ae4b0b7ab45dc1622",
+      "kind": "Eget kortområde. Sluttdato i produkt og regeltekst er ikke helt lik.",
+      "summary": "Nordre Mistra omfatter elva fra Gammeldammen til Hullbekken, med angitte sideelver, men ikke sjøer/tjern. Produktet angir 1. juni-31. august; regelteksten sier til 1. september. Appen krever avklaring for 1. september. Sidebekkene har siste fiskedag 25. august. Veslemistra ovenfor Skånsjøen er stengt. Kortet for nedre Mistra gjelder ikke automatisk her.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "inatur-guide",
+      "title": "Inatur: Prøv fiskelykken i Mistra",
+      "url": "https://tips.inatur.no/fluefiske-orret/prov-fiskelykken-i-mistra/135673",
+      "kind": "Turguide; strekninger og terreng, ikke presise standplasser.",
+      "summary": "Guiden skiller rundt Nydammen mellom mer strykpreget elv nedover og roligere partier oppover. Gamledammen og retningen mot Mistsjøene trekkes frem for fluefiske. Dambua, Lomnes-Mistra og Gr~nholm er beskrevne utgangspunkt. Mobildekning og veiforhold må sjekkes. Sjøene er ikke automatisk dekket av elvekortene.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "fishspot",
+      "title": "Fishspot: The Hunt for Big Trout",
+      "url": "https://www.fishspot.no/the-hunt-for-big-trout/115354",
+      "kind": "Intervju med Inge Rønning; eksempler fra flere elver, inkludert Rena.",
+      "summary": "Rønning beskriver oftest 7-11 cm wobblere, vanligvis naturfarger som ligner byttefisk, mørkere farger i mørke og signalfarger som alternativ. Han nevner tung metallsluk, blant annet 20 g Møresild, ved behov for rekkevidde/dybde. Han understreker vannstand og sensommer for Mistra. Dette er erfaring, ikke en bevist biteprognose for hvert sted.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "rendalen",
+      "title": "Opplev Rendalen: Fiske i Mistra",
+      "url": "https://www.opplevrendalen.no/opplevelser/fiske-i-mistra-p5500253",
+      "kind": "Destinasjonens oversikt og lenker til lokalkunnskap.",
+      "summary": "Wobblere på 7-10 cm, streamere og mark omtales. Guiden anbefaler å sjekke Mistra bru-målingene og søke lokalkunnskap på Åkrestrømmen. Storørretfiske fremstilles som krevende, ikke som et sted med sikker høy fangstrate.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "dambua",
+      "title": "Dambua ved Misterdammen",
+      "url": "https://www.inatur.no/hytte/594105e0e4b05c188ba20707",
+      "kind": "Utleiers adkomstbeskrivelse. Adressen er et referansepunkt, ikke en fiskeposisjon.",
+      "summary": "Lomnesmistra 484. Sommeradkomst via Misterkjølen; ca. 150-200 meter fra parkering til Dambua er oppgitt. Ingen mobildekning er oppgitt. Utgangspunkt for strekningen ved Nydammen, men ikke dokumentert universelt tilgjengelig fiskebrygge.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "lomnes",
+      "title": "Utstustua ved Lomnes-Mistra",
+      "url": "https://www.inatur.no/hytte/5940ffafe4b05c188ba206ba",
+      "kind": "Utleiers beskrivelse av utgangspunkt.",
+      "summary": "Lomnesmistra 486. Utleier angir omtrent 800 meter gange fra parkeringen ved Misterdammen til setervollen. Bruk lovlig sti; private hytter er ikke fri parkering eller fri fiskeadkomst.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "gronholm",
+      "title": "Ytre Rendal JFF: Grønholmhyttene",
+      "url": "https://www.njff.no/hedmark/ytrerendal/gronholm-hyttene",
+      "kind": "Lokalforeningen som driver hyttene.",
+      "summary": "Hyttene ligger ved samløpet Søta/Grøna, omtrent 500 meter fra Mistra. Det er et utgangspunkt, ikke en koordinatfestet fiskehøl.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "gronholm-access",
+      "title": "Grønholmhytta: adkomst",
+      "url": "https://www.inatur.no/hytte/59a417cfe4b0ea87636d95af",
+      "kind": "Utleiers adresse og praktisk adkomst.",
+      "summary": "Jotveien 212. Sommervei omtrent fra juni; ved vårløsning oppgis to kilometer gange fra bom. Dårlig mobildekning. Hytta er ikke merket handikaptilpasset.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "historical",
+      "title": "Fiskeguiden: Mistra, eldre erfaringer",
+      "url": "https://www.fiskeguiden.no/fiskeplassene/8800-mistra-8800",
+      "kind": "Historisk sekundærkilde med blandede publiseringsår.",
+      "summary": "Eldre omtale peker på nedre elv i mai/juni og lenger opp i juli/august. En fangsthistorie nevner berghammer ovenfor Balstadmistra. Dette brukes bare som historisk sesong- og områdesignal; nøyaktige høler, gamle priser og tidligere regler gjenbrukes ikke.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "road",
+      "title": "Misterkjølen: vei og betaling",
+      "url": "https://mistraelvelag.no/payment-for-using-the-private-road-misterkjole-skogsvei/",
+      "kind": "Veieiers informasjon. Åpning varierer med vårløsningen.",
+      "summary": "Privat bomvei med sesongavhengig åpning. Sjekk driftsmelding hos Mistra Elvelag før avreise; en gammel turartikkel er ikke bevis for at veien er åpen nå.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "localmap",
+      "title": "Lokalt kart over fiskeplasser",
+      "url": "https://mistra.no/kart-over-fiskeplasser-i-mistra/",
+      "kind": "Kartside funnet; bildefilen kunne ikke hentes i dette arbeidsmiljøet.",
+      "summary": "Appen lenker til originalkartet. Kartgrafikken og eksakte hølplasseringer er ikke kopiert eller verifisert fra bildet.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "nve-river",
+      "title": "NVE ELVIS: faktisk elvegeometri",
+      "url": "https://kart.nve.no/enterprise/rest/services/Elvenett1/MapServer/2",
+      "kind": "Primærdata fra NVE, NLOD. Digital elvelinje, ikke dybde eller vadekart.",
+      "summary": "Appen henter elvenavn Mistra i WGS84, med paginering. Data mellomlagres. Ingen egenkonstruert elvelinje vises dersom forespørselen feiler.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "nve-api",
+      "title": "NVE HydAPI: dokumentasjon og nøkkel",
+      "url": "https://hydapi.nve.no/UserDocumentation/",
+      "kind": "Primærkilde. X-API-Key kreves; nøkkelen blir bare på serveren.",
+      "summary": "Mistra bru 2.267.0 brukes for vannføring (1001) og vannstand (1000). Temperatur forsøkes fra Mistra 2.695.0 (1003). Manglende og gamle målinger merkes. Ukontrollerte sanntidsdata er ikke sikkerhetsgaranti.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "sildre",
+      "title": "Sildre: Mistra bru 2.267.0",
+      "url": "https://sildre.nve.no/station/2.267.0",
+      "kind": "NVEs stasjonsside. Vannstandens referansenivå er ikke elvedybde.",
+      "summary": "Direkte alternativ når HydAPI-nøkkel mangler. Appen fyller aldri inn eksempelvannføring som sanntid.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "temp",
+      "title": "Sildre: Mistra temperatur 2.695.0",
+      "url": "https://sildre.nve.no/station/2.695.0",
+      "kind": "Tilgjengelighet varierer. Appen viser ikke lufttemperatur som vanntemperatur.",
+      "summary": "Eventuelle temperaturmålinger viser eget tidspunkt og stasjonsnummer.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "met",
+      "title": "MET Norway Locationforecast",
+      "url": "https://api.met.no/weatherapi/locationforecast/2.0/documentation",
+      "kind": "Timeprognose. Varslet nedbør er ikke en måling av sikt i elva.",
+      "summary": "V~eret hentes for valgt utgangspunkt og lagres kortvarig. Når data mangler brukes ingen oppdiktet værserie.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "kartverket",
+      "title": "Kartverket: stedsnavn-API",
+      "url": "https://www.kartverket.no/api-og-data/stedsnavndata/brukarrettleiing-stadnamn-api",
+      "kind": "Fritt stedsnavnoppslag; tvetydige navn plasseres ikke vilkårlig.",
+      "summary": "Adresser og navn brukes til å finne kildeomtalte utgangspunkt, ikke til å bekrefte fisk eller fiskeadkomst.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "balstad-location",
+      "title": "Kartreferanse: Balstadmistersåtra",
+      "url": "https://mapcarta.com/N2810183203",
+      "kind": "OSM node 2810183203 via Mapcarta; referansepunkt på land.",
+      "summary": "Koordinaten peker til setra, ikke til berghammeren eller en fiskehøl.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "mistdal-location",
+      "title": "Kartreferanse: Mistdalen",
+      "url": "https://no.wikipedia.org/wiki/Mistdalen",
+      "kind": "Områdereferanse, med lenke til Kartverket.",
+      "summary": "Koordinaten brukes som oversikt over setergrenda, ikke som fiskekortgrense eller fiskeposisjon.",
+      "checked": "2026-09-18"
+    },
+    {
+      "id": "topo",
+      "title": "Kartverket: topo og WMTS",
+      "url": "https://cache.kartverket.no/",
+      "kind": "Offisiell karttjeneste",
+      "checked": "2026-09-18",
+      "summary": "Topografisk bakgrunn med stier/terreng. Fiskekortgrenser, fiskebestand og dybde kan ikke utledes av dette kartlaget."
+    }
+  ],
+  "reaches": [
+    {
+      "id": "nedre",
+      "name": "Nedre Mistra ved Åkrestrømmen",
+      "section": "main",
+      "access": "mixed",
+      "habitat": "pools",
+      "months": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "sources": [
+        "rules-main",
+        "rendalen",
+        "historical"
+      ],
+      "description": "Start med å avklare brua som fiskekortgrense. Nedre elv har vandrende storørret; enkeltpartier kan være bratte.",
+      "tactic": "Forslag: fisk strømskiller og roligere lommer fra trygg bredde. Ikke kryss stryk for å nå en antatt standplass.",
+      "lookup": {
+        "type": "name",
+        "queries": [
+          "Åkrestrømmen"
+        ],
+        "poi": true
+      },
+      "anchor": null
+    },
+    {
+      "id": "grona",
+      "name": "Mistra ved Grøna / Grønholm",
+      "section": "main",
+      "access": "easier",
+      "habitat": "confluence",
+      "months": [
+        6,
+        7,
+        8
+      ],
+      "sources": [
+        "inatur-guide",
+        "gronholm",
+        "gronholm-access"
+      ],
+      "description": "Kildeomtalt utgangspunkt via Grønholm. Adressen ligger ved sideelva; om lag 500 meter til Mistra er oppgitt.",
+      "tactic": "Forslag: undersøk strømskillet i hovedelva. Vannfarge og strøm ved samløp må vurderes på stedet.",
+      "lookup": {
+        "type": "address",
+        "query": "Jotveien 212",
+        "poi": true
+      },
+      "anchor": null
+    },
+    {
+      "id": "balstad",
+      "name": "Balstadmistra - historisk storørretstrekning",
+      "section": "main",
+      "access": "unknown",
+      "habitat": "pools",
+      "months": [
+        7,
+        8
+      ],
+      "sources": [
+        "historical",
+        "balstad-location"
+      ],
+      "description": "Eldre fangstomtale peker mot en berghammer ovenfor setra. Kartpunktet er seterreferansen; selve hølen er ikke stedfestet.",
+      "tactic": "Forslag: let etter rolige dype lommer ved stryk, uten å anta at et kartpunkt viser fiskens standplass.",
+      "lookup": null,
+      "anchor": {
+        "lat": 61.75898,
+        "lon": 11.40837,
+        "label": "Seterreferanse, ikke fiskehøl",
+        "source": "balstad-location",
+        "precision": "poi"
+      }
+    },
+    {
+      "id": "nydammen",
+      "name": "Nydammen / Misterdammen",
+      "section": "main",
+      "access": "easier",
+      "habitat": "mixed",
+      "months": [
+        6,
+        7,
+        8
+      ],
+      "sources": [
+        "hooked",
+        "inatur-guide",
+        "dambua",
+        "road"
+      ],
+      "description": "Et praktisk utgangspunkt langs Mistra. Markerplassen hentes fra Dambuas adresse, ikke fra et gjettet punkt i elva.",
+      "tactic": "Forslag: fisk overgangen mellom rolig parti og strøm. Flue eller en wobbler som går stabilt på aktuell vannføring.",
+      "lookup": {
+        "type": "address",
+        "query": "Lomnesmistra 484",
+        "poi": true
+      },
+      "anchor": null
+    },
+    {
+      "id": "lomnes",
+      "name": "Lomnes-Mistra - rolige partier oppover",
+      "section": "main",
+      "access": "walk",
+      "habitat": "quiet",
+      "months": [
+        6,
+        7,
+        8
+      ],
+      "sources": [
+        "inatur-guide",
+        "lomnes"
+      ],
+      "description": "Seterområdet omtales som et utgangspunkt et stykke til fots fra Misterdammen. Ingen mobildekning er oppgitt av utleier.",
+      "tactic": "Forslag: observer vak før du fisker. Begynn med diskret presentasjon; prøv streamer når det ikke er tydelig overflateaktivitet.",
+      "lookup": {
+        "type": "address",
+        "query": "Lomnesmistra 486",
+        "poi": true
+      },
+      "anchor": null
+    },
+    {
+      "id": "gamledammen",
+      "name": "Gamledammen - sjekk kortgrensen",
+      "section": "boundary",
+      "access": "unknown",
+      "habitat": "quiet",
+      "months": [
+        6,
+        7,
+        8
+      ],
+      "sources": [
+        "rules-main",
+        "rules-north",
+        "inatur-guide"
+      ],
+      "description": "Gammeldammen/Gamledammen er grenseomtale for to kortområder. Nordre Mistra har eget kort. Sjøene inngår ikke automatisk.",
+      "tactic": "Forslag: fisk bare den siden av grensen som kortet ditt dekker. En eventuell kartmarkør erstatter ikke grensebeskrivelsen.",
+      "lookup": {
+        "type": "name",
+        "queries": [
+          "Gammeldammen",
+          "Gamledammen"
+        ],
+        "poi": true
+      },
+      "anchor": null
+    },
+    {
+      "id": "nordre",
+      "name": "Nordre Mistra / Misterdalen",
+      "section": "north",
+      "access": "walk",
+      "habitat": "quiet",
+      "months": [
+        6,
+        7,
+        8
+      ],
+      "sources": [
+        "rules-north",
+        "inatur-guide",
+        "mistdal-location"
+      ],
+      "description": "Eget elvekort fra Gammeldammen til Hullbekken. Kartreferansen er setergrenda Mistdalen, ikke en bestemt fiskekulp.",
+      "tactic": "Forslag: utforsk roligere elvepartier med flue, mindre spinner eller wobbler. Bekreft sideelv- og sjøgrenser først.",
+      "lookup": null,
+      "anchor": {
+        "lat": 61.875833,
+        "lon": 11.351944,
+        "label": "Setergrend / områdereferanse",
+        "source": "mistdal-location",
+        "precision": "area"
+      }
+    },
+    {
+      "id": "holsbu",
+      "name": "Holsbuhølen - Hooked 2012",
+      "section": "main",
+      "access": "difficult",
+      "habitat": "pools",
+      "months": [
+        6,
+        7,
+        8
+      ],
+      "sources": [
+        "hooked"
+      ],
+      "description": "Navngitt i reportasjen, men nøyaktig posisjon kan ikke kontrolleres fra artikkelen. Derfor ingen oppdiktet kartpin.",
+      "tactic": "Forslag: bruk omtalen som kunnskap om fiskemåten. Lokal veivisning er nødvendig for å finne riktig høl uten gjetting.",
+      "lookup": null,
+      "anchor": null
+    }
+  ],
+  "strategy": [
+    {
+      "id": "source9",
+      "title": "Kildenes wobbler-startpunkt",
+      "text": "Hooked 2012: 9 cm, grønn/grønn-oransje; flyteevne tilpasses plassen. Fishspot-intervjuet: oftest naturfarger og 7-11 cm. Dette er to erfaringer, ikke en fasit. Din eske matches på type og farge; ukjent lengde og flyteevne vises som ukjent.",
+      "sources": [
+        "hooked",
+        "fishspot"
+      ]
+    },
+    {
+      "id": "method",
+      "title": "Egen arbeidsplan ved en høl",
+      "text": "Forslag fra appmodellen: observer først, fisk nærmeste strømkant før lange kast, kontroller at agnet går stabilt, varier vinkel og vannlag. Bytt til et egnet alternativ etter en gjennomfisket runde. Ingen eksakte sekunder, dybder eller fangstsannsynligheter utledes fra kart alene.",
+      "sources": []
+    },
+    {
+      "id": "flow",
+      "title": "Vannføring uten falsk fasit",
+      "text": "NVE viser nedre målepunkt, ikke fart og dybde i alle høler. Det er ikke funnet en dokumentert universell optimal m3/s-verdi for Mistra. Appen viser trend og bruker dine egne observasjoner av lav/normal/høy vannføring og sikt. Kraftig stigning er en varsomhetsindikator, aldri et vadesikkerhetssignal.",
+      "sources": [
+        "nve-api",
+        "sildre"
+      ]
+    },
+    {
+      "id": "time",
+      "title": "Sesong og tidspunkt",
+      "text": "Historiske guider peker på nedre elv tidlig og høyere strekninger utover sommeren; turkilder omtaler oppgang tidlig sommer. Morgen/kveld og mørkere lys er mulige arbeidsvinduer, ikke garantier. Publiserte fredninger og uttaksgrenser overstyrer alltid rangeringen.",
+      "sources": [
+        "historical",
+        "rules-main",
+        "fishspot"
+      ]
+    },
+    {
+      "id": "access",
+      "title": "Adkomst og sikkerhet",
+      "text": "Korte avstander til en hytte betyr ikke enkel fiskeadkomst langs hele bredden. Stier kan være bratte/glatte og skogsbilveier stengt i vårløsningen. Last guide og siste kartdata før avreise. Appen er ikke et navigasjons- eller vadekart.",
+      "sources": [
+        "road",
+        "dambua",
+        "gronholm-access"
+      ]
+    }
+  ],
+  "stations": {
+    "flow": "2.267.0",
+    "temperature": "2.695.0"
+  },
+  "rulesDisclaimer": "Kontrollert mot publiserte kilder 18.09.2026. Sesonger beregnes for 2026; andre år krever ny bekreftelse. Kortområder vises som tekst, ikke som juridisk grensegeometri."
+}
