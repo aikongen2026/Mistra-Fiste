@@ -8,7 +8,7 @@ test.after(async()=>{global.fetch=nativeFetch;delete process.env.NVE_API_KEY;awa
 test.afterEach(()=>{global.fetch=nativeFetch;});
 const request=p=>nativeFetch(base+p);
 test('Health, guide and all entry records load locally',async()=>{
- const health=await (await request('/api/health')).json();assert.equal(health.ok,true);assert.equal(health.app,'Mistra Fiske');assert.equal(health.version,'1.2.0');assert.equal(health.maxVisibleRiverPoints,10);
+ const health=await (await request('/api/health')).json();assert.equal(health.ok,true);assert.equal(health.app,'Mistra Fiske');assert.equal(health.version,'1.2.1');assert.equal(health.maxVisibleRiverPoints,10);
  const g=await (await request('/api/guide')).json();assert.equal(g.reaches.length,8);
 });
 test('No NVE key automatically uses official VEPS/HYDRA observations',async()=>{

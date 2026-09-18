@@ -1,6 +1,6 @@
 {
   "app": "Mistra Fiske",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "basedOn": "Fiste guiden REV27 LIVE",
   "checked": "2026-09-18",
   "map": {
@@ -205,6 +205,14 @@
       "kind": "Offisiell karttjeneste",
       "checked": "2026-09-18",
       "summary": "Topografisk bakgrunn med stier/terreng. Fiskekortgrenser, fiskebestand og dybde kan ikke utledes av dette kartlaget."
+    },
+    {
+      "id": "jaktfiske",
+      "title": "Jakt & Fiske: Storørretsjokket – Mistra/Storsjøen",
+      "url": "https://jaktogfiske.njff.no/stororret-trolling-orret/stororretsjokket/122441",
+      "type": "reportasje / historiske erfaringer",
+      "checked": "2026-09-18",
+      "summary": "Mistra-erfaringer med 9 cm Rapala Original og sølvfarget 9 cm Savage Gear-wobbler. Historiske fiskererfaringer, ikke fangstgaranti."
     }
   ],
   "reaches": [

@@ -36,6 +36,37 @@
   return {score:clamp(score,20,85),rule,reasons,sourceLevel:reach.id==='holsbu'||reach.id==='balstad'?'Historisk omtale':'Kildeomtalt strekning',weatherApplied:!!weather};
  }
  const methodLabel={all:'Alle metoder',wobbler:'Wobbler',spoon:'Sluk',spinner:'Spinner',fly:'Flue',worm:'Mark',vibration:'Vibrasjonsagn'};
+ function hashString(value=''){let h=2166136261;for(const ch of String(value)){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+ function pointPreference(ctx){
+  if(!ctx?.pointId)return null;
+  const variant=Number.isInteger(ctx.pointVariant)?ctx.pointVariant:hashString(ctx.pointId)%5;
+  const variants=[
+   {tags:['green'],label:'grønn profil'},
+   {tags:['trout','natural'],label:'ørret/natur'},
+   {tags:['silver'],label:'sølv/natur'},
+   {tags:['warm','contrast'],label:'varm kontrast'},
+   {tags:['dark','natural'],label:'mørk natur'}
+  ];
+  return {...variants[variant%variants.length],variant};
+ }
+ function sourceLures(ctx={}){
+  const pool=[
+   {id:'hooked-green-9',name:'9 cm grønn / grønn-oransje wobbler',family:'wobbler',source:'Hooked – Mistra',detail:'Inge Rønning oppga dette som personlig favoritt i Mistra. Både flytende og synkende variant ble brukt etter plassen.',fit:'Standard Mistra-valg når du vil fiske wobbler aktivt gjennom strømkanter og høler.'},
+   {id:'rapala-original-9',name:'Rapala Original 9 cm – flytende',family:'wobbler',source:'Jakt & Fiske – Mistra',detail:'John Rune Heimdahl beskrev 9 cm Rapala Original som sin vanligste wobbler i Mistra.',fit:'Passer særlig når du vil fiske relativt høyt og kontrollert gjennom roligere strøm eller langs kanter.'},
+   {id:'silver-savage-9',name:'Sølvfarget Savage Gear-wobbler – ca. 9 cm',family:'wobbler',source:'Jakt & Fiske – Mistra',detail:'Ove Hagen rapporterte storørret fra Mistra på en sølvfarget 9 cm Savage Gear-wobbler.',fit:'Natur/sølv er et logisk kildevalg i klarere vann eller når småfiskimitasjon prioriteres.'},
+   {id:'moresild-20',name:'Møresild – ca. 20 g',family:'spoon',source:'Fishspot – Inge Rønning',detail:'Rønning trekker fram tung Møresild når han vil kaste lenger og fiske dypere.',fit:'Aktuelt i dypere høler, kraftigere strøm eller når rekkevidde er viktigere enn wobblerspill.'}
+  ];
+  const flow=ctx.flow||'unknown',clarity=ctx.clarity||'unknown',bend=ctx.pointKind==='bend'||Number(ctx.bendDegrees)>=25,night=(()=>{const p=parts(ctx.date);return p&&(p.hour>=21||p.hour<6);})();
+  function score(x){let n=50;
+   if(x.id==='hooked-green-9')n+=clarity==='coloured'?14:6;
+   if(x.id==='rapala-original-9')n+=bend?10:5;
+   if(x.id==='silver-savage-9')n+=clarity==='clear'?14:clarity==='unknown'?7:2;
+   if(x.id==='moresild-20')n+=flow==='high'?18:bend?7:3;
+   if(night&&x.id==='rapala-original-9')n+=3;
+   return n;
+  }
+  return pool.map(x=>({...x,score:score(x)})).sort((a,b)=>b.score-a.score||a.id.localeCompare(b.id));
+ }
  function sourceTarget(ctx){
   if(ctx.method==='worm')return {text:'Aktivt markfiske; tilpass søkke etter strøm og dybde. Ikke faststående redskap.',sources:['hooked','rules-pdf']};
   if(ctx.method==='fly'||(ctx.reach.habitat==='quiet'&&ctx.goal==='numbers'&&ctx.method==='all'))return {text:'Flue/streamer i roligere partier. Se etter vak og mattilgang; dette er ikke en flue-only-regel.',sources:['inatur-guide','rendalen']};
@@ -61,9 +92,16 @@
    if(ctx.clarity==='unknown'&&l.tags.includes('natural'))score+=4;
    if(l.tags.includes('green')&&l.family==='wobbler'&&ctx.reach.habitat==='pools'){score+=7;why.push('Grønntone nær Hooked-favoritten');}
    if(night&&l.tags.includes('dark')){score+=8;why.push('Mørkere silhuett som et erfaringsbasert alternativ');}
+   const pref=pointPreference(ctx);
+   if(pref){
+    const hits=pref.tags.filter(tag=>l.tags.includes(tag)).length;
+    if(hits){score+=10+Math.min(4,(hits-1)*2);why.push('Punktvariasjon: '+pref.label);}
+    if(ctx.pointKind==='bend'&&l.family==='wobbler'&&(l.tags.includes('natural')||l.tags.includes('green'))){score+=4;why.push('Sving: imitasjon prioriteres');}
+    if(ctx.pointKind!=='bend'&&l.family==='wobbler'&&l.tags.includes('silver')){score+=3;why.push('Elvestrekk: sølvprofil får et lite søkebonus');}
+   }
    if(l.family==='wobbler'&&finite(l.lengthCm)){if(l.lengthCm>=7&&l.lengthCm<=11){score+=6;why.push('Din målte lengde samsvarer med 7-11 cm');}else{score-=6;why.push('Din målte lengde avviker fra kildenes 7-11 cm');}}
    return {...l,match:clamp(score,0,95),why:why.join('. '),matchCaveat:finite(l.lengthCm)?'Lengde fra din registrering. Sjekk flyteevne/gange.':'Kun type-/fargematch. Lengde og flyteevne er ukjent.'};
-  }).filter(Boolean).sort((a,b)=>b.match-a.match||a.id.localeCompare(b.id));
+  }).filter(Boolean).sort((a,b)=>{if(b.match!==a.match)return b.match-a.match;const seed=ctx.pointId?hashString(ctx.pointId):0;return ((hashString(a.id)^seed)>>>0)-((hashString(b.id)^seed)>>>0);});
   if(!rows.length)return rows;
   // Keep the true top choice. Alternatives seek different presentations only within a small score gap.
   const picked=[rows[0]],rest=rows.slice(1);
@@ -88,5 +126,5 @@
   return p;
  }
  function gpx(points){const valid=points.filter(p=>[p.lat,p.lon,p.timestamp].every(finite));let body='',open=false;for(const p of valid){if(p.segmentBreak&&open){body+='</trkseg>';open=false;}if(!open){body+='<trkseg>';open=true;}body+=`<trkpt lat="${p.lat.toFixed(7)}" lon="${p.lon.toFixed(7)}"><time>${new Date(p.timestamp).toISOString()}</time></trkpt>`;}if(open)body+='</trkseg>';return '<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="Mistra Fiske" xmlns="http://www.topografix.com/GPX/1/1"><trk><name>Mistra - mitt GPS-spor</name>'+body+'</trk></gpx>';}
- return {finite,clamp,parts,season,distance,nearestWeather,conditionsFrom,rankReach,rankLures,methodLabel,sourceTarget,tactic,trend,hydrateSeries,gpsFix,gpx};
+ return {finite,clamp,parts,season,distance,nearestWeather,conditionsFrom,rankReach,rankLures,methodLabel,sourceTarget,sourceLures,pointPreference,tactic,trend,hydrateSeries,gpsFix,gpx};
 });

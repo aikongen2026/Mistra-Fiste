@@ -2,3 +2,5 @@ Mistra Fiske 1.2.0
 Bygget videre på Mistra 1.1.0 / Fiste REV27-mønster.
 Kartpunkter genereres bare på levert NVE Mistra-elvelinje.
 Hydrologi: NVE stasjon 2.267.0 Mistra bru, HydAPI eller VEPS/HYDRA fallback.
+
+Jakt & Fiske – Storørretsjokket: historiske Mistra-erfaringer med Rapala Original 9 cm og sølvfarget 9 cm Savage Gear-wobbler. https://jaktogfiske.njff.no/stororret-trolling-orret/stororretsjokket/122441

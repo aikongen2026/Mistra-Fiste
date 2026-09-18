@@ -1,8 +1,8 @@
-# Mistra Fiske 1.2.0 – sømløs kartmodus
+# Mistra Fiske 1.2.1 – sømløs kartmodus
 
 Mistra-spisset fiskeapp bygget videre på kart/Live-mønsteret fra Fiste REV27.
 
-## Nytt i 1.2.0
+## Nytt i 1.2.1
 - De 10 beste kartberegnede elvepunktene vises automatisk i det synlige kartutsnittet.
 - Punktene oppdateres automatisk ved panorering og zoom. Ingen Elvepunkter-knapp.
 - Klikk et punkt: anbefalt sluk og fiskeråd vises umiddelbart øverst i høyrekolonnen.

@@ -37,7 +37,11 @@ function pointRank(point){
   return {...point,score:Math.min(85,rank.score+bendBonus),reason:point.kind==='bend'?'Kartlagt sving: modellens forslag til et sted \u00e5 unders\u00f8ke.':'Fordelt s\u00f8kepunkt langs den synlige elvestrekningen.',reach,rank,
     planning:!M.season('main',date()).open&&!M.season('north',date()).open};
 }
-function riverPointContext(point){return {...context(point.reach||pointReach(point)),date:date().toISOString()};}
+function riverPointContext(point){
+  const baseCtx={...context(point.reach||pointReach(point)),date:date().toISOString()};
+  let h=0;for(const ch of String(point.id||''))h=(Math.imul(h,31)+ch.charCodeAt(0))>>>0;
+  return {...baseCtx,pointId:point.id||'',pointVariant:h%5,pointKind:point.kind||'reach',bendDegrees:Number(point.bendDegrees)||0,pointNumber:Number(point.number)||0};
+}
 function riverPointPopup(point){
   const l=M.rankLures(catalog,riverPointContext(point),lureOverrides)[0];
   return `<b>P${point.number} · ${esc(point.reach.name)}</b><small>${point.planning?'PLANLEGGING':'Kartberegnet elvepunkt'} · ${point.score}/100</small>${l?`<div class="point-popup-lure"><img class="zoomable-lure" src="${esc(l.image)}" alt="${esc(l.name)}" tabindex="0" role="button"><span>${esc(l.name)}</span></div>`:''}<button data-river-details="${esc(point.id)}">Sluk og fiskeråd</button>`;
@@ -48,9 +52,10 @@ function renderRiverPointRules(){
   $('ruleContent').innerHTML=`<div class="rule-title"><h3>${closed?'Ørretfisket er stengt':'Kontroller kortområde'}</h3><span class="rule-badge ${closed?'closed':''}">${closed?'PLANLEGGING':'SESONG'}</span></div><p><b>Mistra Elvelag:</b> ${esc(main.label)}. ${esc(main.detail)}</p><p><b>Nordre Mistra:</b> ${esc(north.label)}. ${esc(north.detail)}</p>`;
 }
 function renderRiverPointDetails(){
-  const p=pointRank(selectedRiverPoint),ctx=riverPointContext(p),target=M.sourceTarget(ctx),lures=M.rankLures(catalog,ctx,lureOverrides),l=lures[0];
-  $('selected').innerHTML=`<span class="card-label">P${p.number||''} · ANBEFALT ELVEPUNKT</span><div class="selected-title-row"><h2>${p.kind==='bend'?'Sving i Mistra':'Mistra – elvestrekning'}</h2><strong class="score-badge">${p.score}/100</strong></div><div class="selected-chips"><span class="chip">${p.planning?'Planlegging':'Kontroller kortområde'}</span><span class="chip">${esc(accessLabel[p.reach.access]||'Tilkomst uavklart')}</span></div>${l?`<div class="lure-pick hero-lure"><img class="zoomable-lure" src="${esc(l.image)}" alt="${esc(l.name)}" tabindex="0" role="button"><div><span class="own-tag">FØRSTEVALG FRA DIN SLUKBOKS</span><b>${esc(l.name)}</b><p>${esc(l.why)}</p></div></div>${lures.length>1?`<div class="alt-heading">Gode alternativer fra slukboksen</div><div class="alternatives">${lures.slice(1,4).map(x=>`<article class="alternative"><img class="zoomable-lure" src="${esc(x.image)}" alt="${esc(x.name)}" tabindex="0" role="button"><b>${esc(x.name)}</b><small>${esc(M.methodLabel[x.family])}</small></article>`).join('')}</div>`:''}`:'<p class="muted">Mark er valgt som metode.</p>'}<div class="quick-advice"><b>Hva som passer i Mistra</b><p>${esc(target.text)}</p><b>Fisk slik</b><p>${esc(M.tactic(l?.family||'worm',ctx.flow))}</p></div>`;
-}function scheduleRiverPoints(){
+  const p=pointRank(selectedRiverPoint),ctx=riverPointContext(p),target=M.sourceTarget(ctx),lures=M.rankLures(catalog,ctx,lureOverrides),l=lures[0],historic=M.sourceLures(ctx).slice(0,4);
+  $('selected').innerHTML=`<span class="card-label">P${p.number||''} · ANBEFALT ELVEPUNKT</span><div class="selected-title-row"><h2>${p.kind==='bend'?'Sving i Mistra':'Mistra – elvestrekning'}</h2><strong class="score-badge">${p.score}/100</strong></div><div class="selected-chips"><span class="chip">${p.planning?'Planlegging':'Kontroller kortområde'}</span><span class="chip">${esc(accessLabel[p.reach.access]||'Tilkomst uavklart')}</span></div>${l?`<div class="lure-pick hero-lure"><img class="zoomable-lure" src="${esc(l.image)}" alt="${esc(l.name)}" tabindex="0" role="button"><div><span class="own-tag">FØRSTEVALG FRA DIN SLUKBOKS</span><b>${esc(l.name)}</b><p>${esc(l.why)}</p></div></div>${lures.length>1?`<div class="alt-heading">3 alternativer fra slukboksen</div><div class="alternatives">${lures.slice(1,4).map(x=>`<article class="alternative"><img class="zoomable-lure" src="${esc(x.image)}" alt="${esc(x.name)}" tabindex="0" role="button"><b>${esc(x.name)}</b><small>${esc(M.methodLabel[x.family])}</small></article>`).join('')}</div>`:''}`:'<p class="muted">Mark er valgt som metode.</p>'}<div class="alt-heading source-choice-heading">Historisk/kildebasert for Mistra</div><div class="source-lure-grid">${historic.map((x,i)=>`<article class="source-lure ${i===0?'source-first':''}"><span>${esc(M.methodLabel[x.family]||x.family)}</span><b>${esc(x.name)}</b><small>${esc(x.fit)}</small><em>${esc(x.source)}</em></article>`).join('')}</div><div class="quick-advice"><b>Hva som passer i Mistra</b><p>${esc(target.text)}</p><b>Fisk slik</b><p>${esc(M.tactic(l?.family||'worm',ctx.flow))}</p></div>`;
+}
+function scheduleRiverPoints(){
   if(!map||!guide)return;
   // One rebuild after movement settles; no upstream/API lookup on map movements.
   if(pointTimer)return;

@@ -51,12 +51,12 @@ test("Package, guide, frontend, and cache carry the same deployment version", ()
   const p = JSON.parse(read("package.json"));
   const g = JSON.parse(read("public/data/mistra.json"));
   const lock = JSON.parse(read("package-lock.json"));
-  assert.equal(p.version, "1.2.0");
+  assert.equal(p.version, "1.2.1");
   assert.equal(g.version, p.version);
   assert.equal(lock.version, p.version);
   assert.equal(lock.packages[""].version, p.version);
   assert.equal(lock.packages["node_modules/leaflet"].version, p.dependencies.leaflet);
   assert.ok(lock.packages["node_modules/leaflet"].integrity.startsWith("sha512-"));
-  assert.match(read("public/index.html"), /<span>1\.2\.0<\/span>/);
-  assert.match(read("public/sw.js"), /mistra-fiske-1\.2\.0/);
+  assert.match(read("public/index.html"), /<span>1\.2\.1<\/span>/);
+  assert.match(read("public/sw.js"), /mistra-fiske-1\.2\.1/);
 });

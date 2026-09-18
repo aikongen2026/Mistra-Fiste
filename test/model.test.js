@@ -125,3 +125,26 @@ test('GPX contains separate segments and excludes invalid points',()=>{
  const a=M.gpsFix(position(),null,now),b={...a,lat:61.771,timestamp:now+5000,segmentBreak:false},c={...b,lat:61.772,timestamp:now+70000,segmentBreak:true};
  const x=M.gpx([a,b,{lat:null},c]);assert.equal((x.match(/<trkseg>/g)||[]).length,2);assert.equal((x.match(/<trkpt /g)||[]).length,3);assert.match(x,/http:\/\/www.topografix.com\/GPX\/1\/1/);
 });
+
+
+test('Point-specific lure bias varies owned wobbler first choice while keeping four owned choices',()=>{
+ const picks=[];
+ for(let v=0;v<5;v++){
+  const ranked=M.rankLures(lures,ctx({method:'wobbler',pointId:'river-test-'+v,pointVariant:v,pointKind:v%2?'bend':'reach',bendDegrees:v%2?35:8}));
+  assert.equal(ranked.length,4);
+  assert.ok(ranked.every(x=>x.owned===true));
+  picks.push(ranked[0].id);
+ }
+ assert.ok(new Set(picks).size>=3,'expected at least three distinct first choices across five points');
+});
+
+test('Source-backed Mistra lure list includes at least three historical choices and varies ordering',()=>{
+ const a=M.sourceLures(ctx({pointId:'a',pointKind:'bend',bendDegrees:42,clarity:'clear',flow:'normal'}));
+ const b=M.sourceLures(ctx({pointId:'b',pointKind:'reach',bendDegrees:5,clarity:'coloured',flow:'high'}));
+ assert.ok(a.length>=3);assert.ok(b.length>=3);
+ for(const row of a){assert.ok(row.name);assert.ok(row.source);assert.ok(row.detail);}
+ assert.ok(a.some(x=>/grønn/i.test(x.name)));
+ assert.ok(a.some(x=>/Rapala Original/i.test(x.name)));
+ assert.ok(a.some(x=>/Møresild/i.test(x.name)));
+ assert.notDeepEqual(a.map(x=>x.id),b.map(x=>x.id));
+});
