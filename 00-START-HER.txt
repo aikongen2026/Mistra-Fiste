@@ -1,14 +1,31 @@
-Mistra Fiske 1.0 - NY APP, IKKE ERSTATT FISTE/VESTFJELLA
+MISTRA FISKE 1.0.1 - RETTER MANGLENDE DOCKERFILE
 
-1. Opprett nytt GitHub-repo, f.eks. MISTRA-FISKE.
-2. Pakk ut ZIP. Dra ALT INNHOLDET inni Mistra-Fiske-1.0-ONE-UPLOAD til repo-roten. Behold public-, scripts- og test-mappene. Ikke last opp selve ZIP-en.
-3. Commit changes. I Render: New > Web Service > koble det nye repoet.
-4. Build command: npm install --omit=dev
-   Start command: npm start
-   Runtime: Node
-5. Målinger: skaff gratis nøkkel via https://hydapi.nve.no/UserDocumentation/ og sett NVE_API_KEY i Render > Environment. Ingen nøkkel i GitHub.
-6. Valgfritt: MET_USER_AGENT med din kontaktinformasjon.
-7. Åpne Render-adressen. /api/health viser Mistra Fiske 1.0.0. Tillat GPS for Live.
+Bruk samme GitHub-repo og Render-tjeneste som du allerede har.
+Du trenger ikke bytte fra Docker til Node eller opprette noe nytt.
 
-Guide, egne agn, kartoppsett og GPS fungerer uten NVE-nøkkel. Automatiske NVE-målinger gjør ikke det.
-For lokal PC: installer Node.js og dobbeltklikk START-HER.bat. Første oppstart trenger nett for npm install.
+1. Pakk ut ZIP-filen.
+2. I GitHub: aikongen2026/Mistra-Fiste > Add file > Upload files.
+3. Dra ALT INNHOLDET inni Mistra-Fiske-1.0.1-DOCKER-ONE-UPLOAD
+   inn i opplastingsvinduet. Behold undermappene public, scripts og test.
+   Dockerfile skal ligge direkte ved siden av package.json og server.js.
+   Ikke last opp selve ZIP-filen eller en ekstra overordnet mappe.
+4. Trykk Commit changes. Auto-Deploy er aktivert på skjermbildet ditt.
+   Hvis den ikke starter: Render > Manual Deploy > Deploy latest commit.
+
+Behold innstillingene fra skjermbildet:
+Runtime: Docker
+Root Directory: tomt
+Dockerfile Path: ./Dockerfile
+Docker Build Context Directory: .
+Docker Command: tomt (Dockerfile starter appen)
+
+Pakken installerer Leaflet og starter Node automatisk under Docker.
+Etter vellykket deploy viser /api/health versjon 1.0.1.
+
+NVE_API_KEY skal fortsatt bare ligge i Render > Environment.
+Den er valgfri for oppstart, men nødvendig for automatiske NVE-målinger.
+Ingen privat nøkkel er inkludert i pakken.
+
+Lokalt med Node: npm ci --omit=dev, deretter npm start.
+Lokalt med Docker: docker build -t mistra-fiske .
+                  docker run --rm -p 10000:10000 mistra-fiske

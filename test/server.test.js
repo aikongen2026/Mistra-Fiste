@@ -8,7 +8,7 @@ test.after(async()=>{global.fetch=nativeFetch;delete process.env.NVE_API_KEY;awa
 test.afterEach(()=>{global.fetch=nativeFetch;});
 const request=p=>nativeFetch(base+p);
 test('Health, guide and all entry records load locally',async()=>{
- const health=await (await request('/api/health')).json();assert.equal(health.ok,true);assert.equal(health.app,'Mistra Fiske');assert.equal(health.version,'1.0.0');
+ const health=await (await request('/api/health')).json();assert.equal(health.ok,true);assert.equal(health.app,'Mistra Fiske');assert.equal(health.version,'1.0.1');
  const g=await (await request('/api/guide')).json();assert.equal(g.reaches.length,8);
 });
 test('No NVE key gives configuration status, never sample data',async()=>{

@@ -1,24 +1,57 @@
-# Testresultat - Mistra Fiske 1.0
+# Testresultat - Mistra Fiske 1.0.1 (Docker-retting)
 
-## Kontroller som er kjørt
+Kontrollert 18.09.2026. Denne endringen gjelder deploy-oppsettet, ikke fiskerådene.
 
-39 automatiske Node-tester bestått. De dekker norsk dato/sesong, hovedkort og nordre kort, augustgrense, ugyldige år, sortering, agnfiltrering, manglende målinger, NVE-stasjonsvalg, API-nøkkel i header, koordinatvalidering, kartpaging, tvetydige navn, GPS-støy/gap og GPX. HTTP-serveren og lokale bildefiler er testet i prosessen.
+## Faktisk kjørt i denne revisjonen
 
-29 kontroller av den faktiske HTML/JavaScript-visningen i Chromium bestått, i både desktop- og mobilstørrelse. Filter, stedsvalg, helt agnbilde, modal, lokal logg, Live start/stopp, manuell panoreringspause og gjenopptatt følging er kontrollert. Her var Leaflet, eksterne API-svar, lagring/historikk og GPS erstattet av kontrollerte testdobler. Dette er ikke en feltprøve eller en bekreftelse på eksterne kartfliser.
+- 45 av 45 automatiske Node-tester bestod: de 39 opprinnelige testene og
+  seks nye kontroller for Docker-fil, kildefiler, pakkeversjon,
+  avhengighetslås, Render-konfigurasjon, portvalg og utelating av hemmeligheter.
+- `npm run verify` bestod: appidentitet, versjon, bildefiler og JS-syntaks.
+- `npm install --package-lock-only --offline --ignore-scripts --no-audit --no-fund`
+  bestod. Dette kontrollerer låsefilen; det installerer ikke Leaflet.
+- Direkte prosessoppstart med `node server.js`, `NODE_ENV=production` og
+  port 10000 bestod. Koden lyttet som konfigurert på 0.0.0.0.
+- En ny oppstart med `PORT=19876` bestod: appen bruker miljøvariabelen,
+  ikke en hardkodet port. Begge oppstarter ble kjørt som ikke-root (uid 65534).
+- `/api/health` svarte `ok: true`, `app: Mistra Fiske`, `version: 1.0.1`
+  i begge prosessene, uten NVE-nøkkel.
+- HTML, JavaScript, CSS, service worker, kildeguide og alle 18 agnbilder
+  svarte HTTP 200 fra den første testserveren (25 fil-/guideendepunkter).
+- Uten NVE-nøkkel returnerte hydrologiendepunktet tydelig konfigurasjonsstatus,
+  ikke oppdiktede måleverdier. Serveroppstart avhenger ikke av NVE-tilgang.
+- GPS-/kartkoden i `public/app.js`, modellkoden, CSS, agnkatalog og alle
+  18 agnbilder er identiske byte for byte med 1.0-pakken.
+- ZIP-en er integritetssjekket og inneholder 48 filer.
 
-18 enkeltutklipp er visuelt gjennomgått mot brukerens originale foto. Ingen samlefoto brukes som anbefalt enkeltagn. Layout- og syntakskontroll kjøres også ved oppstart med npm run verify.
+## Ikke kjørt / begrensninger
 
-## Ikke sluttprøvd
+Docker, Podman og BuildKit er ikke installert i arbeidsmiljøet. Et faktisk
+`docker build` og oppstart av Docker-imaget er derfor IKKE gjennomført her.
+Siste kontroll av dette skjer når Render bygger pakken.
 
-Byggemiljøet kunne ikke hente npm-pakken Leaflet eller kontakte de virkelige MET-, NVE- og Kartverket-endepunktene. Full oppkobling med installert Leaflet, NVE_API_KEY og fysisk mobil-GPS må derfor kontrolleres etter deploy. npm install på Render installerer den låste Leaflet-versjonen 1.9.4.
+Direkte npm-nedlasting i arbeidsmiljøet feilet med DNS-feilen EAI_AGAIN.
+Leaflet ble dermed ikke installert lokalt, og `/vendor/leaflet/*` ble ikke
+gjennomprøvd i denne revisjonen. Docker-bygget laster den offisielle
+Leaflet 1.9.4-pakken fra npm, sjekker integritet med package-lock.json og
+kjører `scripts/verify-vendor.js` før imaget kan bli ferdig.
 
-De nye geodataoppslagene er skrevet mot offisiell dokumentasjon. Ekte elvelinje og entydige adresser hentes på nettet før de kan vises. To kildeoppgitte områdereferanser følger med; ingen fiskehøler er konstruert. Ved feil blir fraværet synlig, mens kildeguiden fortsetter å fungere.
+Lockfilens versjon, URL og SHA-512-integritet kommer fra offentlig metadata:
+https://registry.npmjs.org/leaflet/1.9.4
 
-Ingen navigasjon, fiskesannsynlighet, adkomst, mobildekning, privat kjørerett eller vadesikkerhet er garantert. Bakgrunns-/låst-skjerm-GPS i en nettleser kan stoppe.
+Eksterne MET/NVE/Kartverket-svar i unit-testene er kontrollerte testsvar,
+ikke målinger fra testtidspunktet. Ekte mobil-GPS og ende-til-ende nettleserbruk
+med karttjenestene ble ikke testet på nytt. Tidligere rapporterte 29
+nettleserkontroller fra 1.0 er ikke gjentatt og inngår ikke i testtallet over.
 
-## Gjenta lokalt
+## Gjenta
 
-npm test
-npm run verify
+Lokalt: `npm ci --omit=dev`, `npm test`, `npm run verify`,
+`node scripts/verify-vendor.js`, `npm start`.
 
-Testene under test/ krever Node 20+ og bruker ikke ekte nøkler. De kontrollerte browser-testene ble kjørt separat i byggemiljøet; testdobler og falske GPS/kart/måleverdier inngår ikke i public-dataene.
+Med Docker: `docker build -t mistra-fiske .` og
+`docker run --rm -p 10000:10000 mistra-fiske`.
+
+De nye Docker-testene validerer fil-/konfigurasjonsinnholdet. De erstatter
+ikke en faktisk Docker-bygging. API-nøkkel skal bare settes som en
+miljøvariabel ved kjøring, aldri legges i image eller GitHub.

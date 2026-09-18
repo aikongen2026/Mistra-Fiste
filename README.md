@@ -1,4 +1,4 @@
-# Mistra Fiske 1.0
+# Mistra Fiske 1.0.1 - Docker-retting
 
 Egen app for Mistra fra Åkrestrømmen og oppover. Bygger på Fiste REV27s Leaflet-/høyrepaneloppsett, lokale fangstlogg og watchPosition/Live-mønster. Kystmodellen er erstattet med en egen, kildebasert elveguide. Tidligere apper overskrives ikke.
 
@@ -30,9 +30,31 @@ Prioritetspoengene er en egen, transparent hjelpeberegning, ikke validerte fangs
 
 ## GitHub / Render
 
-Pakk ut og last innholdet i rotmappen til et **nytt** repo. Behold undermappene. Build: `npm install --omit=dev`. Start: `npm start`. `render.yaml` er med. Node >=20, anbefalt 22.16.0. Bare Leaflet 1.9.4 er en npm-avhengighet; den serveres lokalt etter installasjon. Ingen node_modules-mappe skal lastes til GitHub.
+Denne pakken er tilpasset den eksisterende **Docker-tjenesten Mistra-Fiste**.
+Last opp innholdet i samme GitHub-repo. `Dockerfile`, `package.json` og
+`server.js` skal ligge direkte i repo-roten. Behold `public/`, `scripts/` og
+`test/` som undermapper. Ikke opprett en ny tjeneste, og ikke last opp ZIP-en
+uten å pakke den ut. Se `00-START-HER.txt`.
 
-Miljøvariabler: `NVE_API_KEY` (målinger), `MET_USER_AGENT` (egen kontaktidentifikasjon), `PORT` (Render setter), eventuelt `CACHE_DIR`. Mellomlager på gratis Render-disk er midlertidig og kan forsvinne ved deploy; nettleseren beholder også siste hentede geodata. API-nøkkelen er aldri i HTML/JSON fra serveren.
+`Dockerfile` bruker offisielt Node 22 bookworm-slim, installerer den låste
+Leaflet 1.9.4-pakken via `npm ci`, verifiserer appfilene og kartbiblioteket,
+og starter `node server.js`. Appen lytter på `0.0.0.0` og miljøvariabelen
+`PORT`; standarden i Docker er 10000. Den kjører uten root-rettigheter og
+har en skrivbar `/app/.cache`. `.dockerignore` utelater lokale avhengigheter,
+mellomlagrede data og hemmelige miljøfiler. NVE-nøkkelen leses ved kjøring,
+ikke under byggingen.
+
+`render.yaml` beskriver Docker og `/api/health` for Blueprint-bruk. En vanlig
+GitHub-opplasting endrer ikke automatisk innstillingene til en eksisterende
+tjeneste som ble opprettet via kontrollpanelet. Innstillingene du viste
+(`./Dockerfile`, rotmappe tom, byggekontekst `.`) passer allerede med pakken.
+
+Lokal kjøring uten Docker fungerer fortsatt med `npm ci --omit=dev` og
+`npm start`. `START-HER.bat` er beholdt. Ikke last opp `node_modules`.
+
+Miljøvariabler: `NVE_API_KEY` (målinger), `MET_USER_AGENT` (egen
+kontaktidentifikasjon), `PORT` og eventuelt `CACHE_DIR`. Kildedata,
+fiskeregler, Live GPS, kartoppsett og bilder fra 1.0 er beholdt.
 
 ## Personvern og Live
 
@@ -42,8 +64,15 @@ GPS og skjerm-våken-funksjonen kan pauses når nettleseren er i bakgrunnen elle
 
 ## Test og kildeproveniens
 
-Kjør `npm test` og `npm run verify`. Se TESTRESULTAT.md for hva som faktisk er kontrollert. Oppkobling mot ekte NVE/MET/Kartverket og GPS i felt kunne ikke sluttprøves fra byggemiljøet. Integrasjonene er skrevet mot dokumenterte endepunkter og testes med kontrollerte svar, og feil vises tydelig.
+Kjør `npm test` og `npm run verify`. 45 automatiske tester og lokal ikke-root-serveroppstart er kontrollert i 1.0.1. Selve Docker-bygget, nettbasert Leaflet-installasjon og fysisk GPS er ikke gjennomført her. Se TESTRESULTAT.md for fullstendig avgrensning. Eksterne API-er i testene bruker kontrollerte svar.
 
 `public/data/mistra.json` inneholder hele kildekatalogen, kontrolltid, kildeoppsummeringer og skillet mellom kildefunn og arbeidsforslag. `public/data/lures.json` inneholder utsnittets koordinater i originalfotoet og bevisst ukjente agnegenskaper. Brukerens foto er ikke hentet fra nettet.
 
 Kartverkets topo: CC BY 4.0. NVE ELVIS/HydAPI: kreditering etter NLOD og kildevilkår. OpenStreetMap: bidragsytere/ODbL; fliser brukes interaktivt, ikke til massenedlasting. Esri-bakgrunn brukes med synlig kreditering. Leaflet 1.9.4: BSD-2-Clause; lisens følger npm-pakken. Kildenes artikler og lokale kommersielle kart er ikke gjengitt i fulltekst.
+
+## Kilder for Docker-oppsettet
+
+- Render Docker: https://render.com/docs/docker
+- Render portbinding: https://render.com/docs/web-services#port-binding
+- Offisielt Node-image: https://github.com/nodejs/docker-node
+- Låst Leaflet-metadata: https://registry.npmjs.org/leaflet/1.9.4

@@ -1,11 +1,11 @@
+# Existing dashboard-created services keep their current settings.
+# This file is also ready for a new Render Blueprint deployment.
 services:
   - type: web
-    name: mistra-fiske
-    runtime: node
+    name: mistra-fiste
+    runtime: docker
     plan: free
-    buildCommand: npm install --omit=dev
-    startCommand: npm start
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     healthCheckPath: /api/health
-    envVars:
-      - key: NODE_VERSION
-        value: 22.16.0

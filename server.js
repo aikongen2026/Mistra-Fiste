@@ -87,5 +87,5 @@ function createServer(){return http.createServer(async(req,res)=>{try{const u=ne
  if(u.pathname==='/api/guide')return send(res,200,config);
  serve(req,res);
  }catch{return send(res,500,{available:false,error:'Intern feil. Grunnkart og lokal guide kan fortsatt brukes.'});}});}
-if(require.main===module){const port=Number(process.env.PORT||3000);createServer().listen(port,'0.0.0.0',()=>console.log('Mistra Fiske 1.0 - port '+port));}
+if(require.main===module){const port=Number(process.env.PORT||3000);createServer().listen(port,'0.0.0.0',()=>console.log('Mistra Fiske '+config.version+' - port '+port));}
 module.exports={createServer,parseWeather,parseAddress,parseName,parseNveFeatures,inside,weather,hydrology,riverGeometry,locatePlace};
