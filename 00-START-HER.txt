@@ -1,31 +1,13 @@
-MISTRA FISKE 1.0.1 - RETTER MANGLENDE DOCKERFILE
+MISTRA FISKE 1.1.0 - OPPDATER EKSISTERENDE APP
 
-Bruk samme GitHub-repo og Render-tjeneste som du allerede har.
-Du trenger ikke bytte fra Docker til Node eller opprette noe nytt.
+Pakk ut. Last alt INNHOLDET inni prosjektmappen opp i samme Mistra-Fiste-repo.
+Behold undermappene. Dockerfile skal ligge rett ved siden av package.json.
+Trykk Commit changes. Render bygger som Docker med samme innstillinger.
+Versjonen i appen og /api/health skal bli 1.1.0.
 
-1. Pakk ut ZIP-filen.
-2. I GitHub: aikongen2026/Mistra-Fiste > Add file > Upload files.
-3. Dra ALT INNHOLDET inni Mistra-Fiske-1.0.1-DOCKER-ONE-UPLOAD
-   inn i opplastingsvinduet. Behold undermappene public, scripts og test.
-   Dockerfile skal ligge direkte ved siden av package.json og server.js.
-   Ikke last opp selve ZIP-filen eller en ekstra overordnet mappe.
-4. Trykk Commit changes. Auto-Deploy er aktivert på skjermbildet ditt.
-   Hvis den ikke starter: Render > Manual Deploy > Deploy latest commit.
+NYTT: Elvepunkter følger synlig elvestrekning under panorering, zoom og Live.
+Elvepunkter er slått på fra start. Bruk Tilkomst: Alle og Ingen grense for
+å se alle beregnede punkter i det synlige kartutsnittet.
+Kildedata for elva må være hentet minst en gang.
 
-Behold innstillingene fra skjermbildet:
-Runtime: Docker
-Root Directory: tomt
-Dockerfile Path: ./Dockerfile
-Docker Build Context Directory: .
-Docker Command: tomt (Dockerfile starter appen)
-
-Pakken installerer Leaflet og starter Node automatisk under Docker.
-Etter vellykket deploy viser /api/health versjon 1.0.1.
-
-NVE_API_KEY skal fortsatt bare ligge i Render > Environment.
-Den er valgfri for oppstart, men nødvendig for automatiske NVE-målinger.
-Ingen privat nøkkel er inkludert i pakken.
-
-Lokalt med Node: npm ci --omit=dev, deretter npm start.
-Lokalt med Docker: docker build -t mistra-fiske .
-                  docker run --rm -p 10000:10000 mistra-fiske
+Ikke last opp ZIP-filen som en fil i repoet. Last opp de utpakkede filene.

@@ -1,57 +1,61 @@
-# Testresultat - Mistra Fiske 1.0.1 (Docker-retting)
+# Tester - Mistra Fiske 1.1.0
 
-Kontrollert 18.09.2026. Denne endringen gjelder deploy-oppsettet, ikke fiskerådene.
+Dato: 18. september 2026.
 
-## Faktisk kjørt i denne revisjonen
+## Kjørt med reell lokal Node HTTP-server
+- npm test: **71 av 71 bestod**.
+- npm run verify: layout, agnbilder, appidentitet og JavaScript-syntaks bestod.
+- 45 eksisterende tester fra 1.0.1 er beholdt, med versjonsforventning 1.1.0.
+- 26 nye regresjonstester dekker elvepunkter, linjeklipping, panorering,
+  zoom, korte synlige linjer, radius, flytting av GPS-base, kildeavgrensning,
+  MultiLineString, manglende/ugyldige data, cacheopplysninger, sesong og tilkomst.
+- Geometritestene bruker uttrykkelig syntetiske testlinjer, ikke påståtte
+  koordinater til Mistra-høler. Disse brukes aldri som fallback i appen.
 
-- 45 av 45 automatiske Node-tester bestod: de 39 opprinnelige testene og
-  seks nye kontroller for Docker-fil, kildefiler, pakkeversjon,
-  avhengighetslås, Render-konfigurasjon, portvalg og utelating av hemmeligheter.
-- `npm run verify` bestod: appidentitet, versjon, bildefiler og JS-syntaks.
-- `npm install --package-lock-only --offline --ignore-scripts --no-audit --no-fund`
-  bestod. Dette kontrollerer låsefilen; det installerer ikke Leaflet.
-- Direkte prosessoppstart med `node server.js`, `NODE_ENV=production` og
-  port 10000 bestod. Koden lyttet som konfigurert på 0.0.0.0.
-- En ny oppstart med `PORT=19876` bestod: appen bruker miljøvariabelen,
-  ikke en hardkodet port. Begge oppstarter ble kjørt som ikke-root (uid 65534).
-- `/api/health` svarte `ok: true`, `app: Mistra Fiske`, `version: 1.0.1`
-  i begge prosessene, uten NVE-nøkkel.
-- HTML, JavaScript, CSS, service worker, kildeguide og alle 18 agnbilder
-  svarte HTTP 200 fra den første testserveren (25 fil-/guideendepunkter).
-- Uten NVE-nøkkel returnerte hydrologiendepunktet tydelig konfigurasjonsstatus,
-  ikke oppdiktede måleverdier. Serveroppstart avhenger ikke av NVE-tilgang.
-- GPS-/kartkoden i `public/app.js`, modellkoden, CSS, agnkatalog og alle
-  18 agnbilder er identiske byte for byte med 1.0-pakken.
-- ZIP-en er integritetssjekket og inneholder 48 filer.
+## Kontrollert grensesnitt i Chromium
+**29 kontroller bestod** med appens faktiske HTML/CSS/JavaScript.
+Kartet var erstattet av en TEST-ONLY Leaflet-hendelses-/DOM-adapter fordi
+nettilgang og nettlesernavigering var sperret i testmiljøet. Dette er ikke
+full ende-til-ende-testing med det ekte Leaflet-biblioteket.
+Elvegeometri, GPS og eksterne API-svar var kontrollerte testdata; bildene var
+appens egne originale agnutklipp. Testadapteren følger IKKE med i programmet.
 
-## Ikke kjørt / begrensninger
+- Initial source line generates points even when all place lookups fail
+- Status and right-side point list are updated
+- Closed season retains planning markers
+- Zoom into lower fixture still shows points
+- Panning to upper fixture changes points
+- No new river network request on pan/zoom
+- All visible markers stay inside current bounds
+- Hiding elvelinje and utgangspunkt leaves independent suggestions visible
+- Point toggle clears pins
+- Point toggle restores pins
+- Unknown access is not mislabelled easy
+- Marker click shows own lure advice and geometry caveat
+- Selected point respects method filter
+- Own complete photo opens in viewer
+- Closing image preserves points
+- Radius includes only points within base distance
+- Moving off the river removes stale pins and explains empty view
+- Whole-river button recovers suggestions
+- Live follow moves the view and updates points
+- Manual pan pauses GPS centering but updates points
+- Follow-me recentres and restores correct area
+- Stopping Live preserves point layer
+- Resize at unchanged bounds does not replace every marker
+- No JavaScript runtime errors
+- Rate-limited refresh retains cached source geometry and points
+- Mobile viewport still has visible points
+- No horizontal page overflow on mobile
+- No mobile runtime errors
+- Fresh visit with unavailable river service explains missing data
 
-Docker, Podman og BuildKit er ikke installert i arbeidsmiljøet. Et faktisk
-`docker build` og oppstart av Docker-imaget er derfor IKKE gjennomført her.
-Siste kontroll av dette skjer når Render bygger pakken.
+## Ikke bekreftet i dette miljøet
+- Ekstern NVE-/MET-/Kartverket-forbindelse og ekte bakgrunnskart.
+- Render-deploy eller Docker-imagebygging. Dockerfile-oppsettet er uendret fra
+  den 1.0.1-pakken som brukeren har fått startet.
+- Fysisk mobil-GPS, virkelig spor under bevegelse eller bakgrunnskjøring.
+- Den faktiske fiskekvaliteten ved modellpunktene.
 
-Direkte npm-nedlasting i arbeidsmiljøet feilet med DNS-feilen EAI_AGAIN.
-Leaflet ble dermed ikke installert lokalt, og `/vendor/leaflet/*` ble ikke
-gjennomprøvd i denne revisjonen. Docker-bygget laster den offisielle
-Leaflet 1.9.4-pakken fra npm, sjekker integritet med package-lock.json og
-kjører `scripts/verify-vendor.js` før imaget kan bli ferdig.
-
-Lockfilens versjon, URL og SHA-512-integritet kommer fra offentlig metadata:
-https://registry.npmjs.org/leaflet/1.9.4
-
-Eksterne MET/NVE/Kartverket-svar i unit-testene er kontrollerte testsvar,
-ikke målinger fra testtidspunktet. Ekte mobil-GPS og ende-til-ende nettleserbruk
-med karttjenestene ble ikke testet på nytt. Tidligere rapporterte 29
-nettleserkontroller fra 1.0 er ikke gjentatt og inngår ikke i testtallet over.
-
-## Gjenta
-
-Lokalt: `npm ci --omit=dev`, `npm test`, `npm run verify`,
-`node scripts/verify-vendor.js`, `npm start`.
-
-Med Docker: `docker build -t mistra-fiske .` og
-`docker run --rm -p 10000:10000 mistra-fiske`.
-
-De nye Docker-testene validerer fil-/konfigurasjonsinnholdet. De erstatter
-ikke en faktisk Docker-bygging. API-nøkkel skal bare settes som en
-miljøvariabel ved kjøring, aldri legges i image eller GitHub.
+Det nye punktmodulet har ingen ekstra npm-avhengigheter. Leaflet 1.9.4 er
+fortsatt låst i package-lock.json og installeres av eksisterende Dockerfile.

@@ -68,3 +68,13 @@
 .live-hud{transform:none;pointer-events:auto;max-width:calc(100% - 24px)}
 .live-hud span{white-space:normal}.live-hud button{flex-shrink:0;pointer-events:auto}
 @media(max-width:1000px){.actions{flex-direction:row}.live-hud{left:12px;top:65px;max-width:calc(100% - 24px)}}
+/* 1.1.0: independent viewport search points, never hidden by season. */
+#pointsToggle[aria-pressed="true"]{border-color:#f2c94c;color:#ffeaa0}
+#riverPointList{max-height:290px;overflow:auto;scrollbar-gutter:stable}
+.river-point-row{display:grid;grid-template-columns:32px 1fr auto;align-items:center;gap:8px;width:100%;padding:10px 7px;margin:5px 0;background:#0b241c;color:#edf8f1;border:1px solid #355d4c;text-align:left;box-shadow:none}
+.river-point-row b{display:block;font-size:.78rem}.river-point-row small{display:block;font-size:.62rem;line-height:1.5;color:#b1c8ba}.river-point-row>strong{font-size:.73rem;color:#f2c94c}.river-point-row.active{border-color:#f2c94c;background:#203528}
+.river-point-pin{height:32px;width:32px;display:grid;place-items:center;border:2px solid #fff8d2;border-radius:50%;background:#f2c94c;color:#1c2011;box-shadow:0 2px 7px #0008;font-size:12px;font-weight:850}
+.river-point-pin.planning{background:#c4b5fd;border-color:#e8e0ff;color:#241839}.river-point-pin.selected{box-shadow:0 0 0 4px #ffffff6b,0 2px 7px #0008}
+.river-point-marker:focus-visible{outline:3px solid white;border-radius:50%}.point-popup-lure{display:grid;grid-template-columns:85px 1fr;align-items:center;gap:8px;margin:8px 0}.point-popup-lure img{width:85px;height:60px;object-fit:contain}.point-popup-lure span{font-size:.75rem}
+#riverPointSummary{min-height:2.5em}.legend{flex-wrap:wrap;max-width:calc(100% - 24px)}
+@media(max-width:500px){.map-tools{right:4px;gap:4px}.map-tools button{font-size:.63rem;padding:6px}.map-notice{bottom:73px}.legend{font-size:.59rem}}

@@ -40,11 +40,11 @@ async function hydrology(){
 }
 const inside=(p)=>p&&M.finite(p.lat)&&M.finite(p.lon)&&p.lat>=61.68&&p.lat<=62.06&&p.lon>=11.13&&p.lon<=11.66;
 function parseNveFeatures(j){return (j.features||[]).flatMap(f=>{
- const paths=f.geometry?.paths||[];return paths.filter(p=>p.length>1&&p.every(c=>Array.isArray(c)&&inside({lat:c[1],lon:c[0]}))).map(p=>({type:'Feature',properties:{name:f.attributes?.elvenavn||'Mistra',source:'NVE ELVIS',id:String(f.attributes?.objectid||f.attributes?.strekninglnr||'')},geometry:{type:'LineString',coordinates:p.map(c=>[c[0],c[1]])}}));});}
-async function riverGeometry(){return cached('river-mistra-v1',7*86400000,async()=>{
+ const paths=f.geometry?.paths||[];return paths.filter(p=>p.length>1&&p.every(c=>Array.isArray(c)&&inside({lat:c[1],lon:c[0]}))).map(p=>({type:'Feature',properties:{name:f.attributes?.elvenavn||'Mistra',source:'NVE ELVIS',id:String(f.attributes?.objectid||f.attributes?.strekninglnr||''),objectType:f.attributes?.objekttype||null},geometry:{type:'LineString',coordinates:p.map(c=>[c[0],c[1]])}}));});}
+async function riverGeometry(){return cached('river-mistra-v2',7*86400000,async()=>{
  const features=[];let incomplete=false;
  for(let page=0;page<10;page++){
-  const q=new URLSearchParams({where:"elvenavn = 'Mistra'",outFields:'objectid,elvenavn,strekninglnr',returnGeometry:'true',outSR:'4326',resultOffset:String(page*2000),resultRecordCount:'2000',orderByFields:'objectid',f:'json'});
+  const q=new URLSearchParams({where:"elvenavn = 'Mistra'",outFields:'objectid,elvenavn,strekninglnr,objekttype',returnGeometry:'true',outSR:'4326',resultOffset:String(page*2000),resultRecordCount:'2000',orderByFields:'objectid',f:'json'});
   const j=await getJSON('https://kart.nve.no/enterprise/rest/services/Elvenett1/MapServer/2/query?'+q,{timeout:18000});features.push(...parseNveFeatures(j));
   if(!j.exceededTransferLimit){incomplete=false;break;}incomplete=true;
  }
@@ -79,7 +79,7 @@ function serve(req,res){const u=new URL(req.url,'http://localhost');let decoded;
  res.writeHead(200,{'Content-Type':type,'Cache-Control':/\.html$|sw\.js$/.test(f)?'no-store':'public, max-age=3600','X-Content-Type-Options':'nosniff'});res.end(b);});}
 function createServer(){return http.createServer(async(req,res)=>{try{const u=new URL(req.url,'http://localhost');
  if(req.method!=='GET'&&req.method!=='HEAD')return send(res,405,{error:'Kun GET støttes.'});
- if(u.pathname==='/api/health')return send(res,200,{ok:true,app:config.app,version:config.version,basedOn:config.basedOn,nveConfigured:!!process.env.NVE_API_KEY});
+ if(u.pathname==='/api/health')return send(res,200,{ok:true,app:config.app,version:config.version,basedOn:config.basedOn,dynamicRiverPoints:true,maxVisibleRiverPoints:28,nveConfigured:!!process.env.NVE_API_KEY});
  if(u.pathname==='/api/weather'){const la=u.searchParams.get('lat'),lo=u.searchParams.get('lon');const lat=la===null?61.775:Number(la),lon=lo===null?11.34:Number(lo);if(!inside({lat,lon}))return send(res,400,{error:'Værpunkt må ligge i Mistra-området.'});return send(res,200,await weather(lat,lon));}
  if(u.pathname==='/api/hydrology')return send(res,200,await hydrology());
  if(u.pathname==='/api/river')return send(res,200,await riverGeometry());

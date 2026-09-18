@@ -1,5 +1,10 @@
-Technical base: Fiste-guiden-REV27-LIVE-ONE-UPLOAD
-Original app.js SHA256: 0282bc9cff0646fcc90bae4a38da5ad3c07a2d8e2bdeab6431cff6ab4411d823
-Reused: REV27 stylesheet and Leaflet UI architecture; GPS watchPosition pattern, local catch-log and GPX concepts.
-Replaced: marine scoring, source data, river lookup, rule calendar, lure matcher, API layer.
-New app and namespace: Mistra Fiske 1.0.0. No changes to previous archives.
+Mistra Fiske 1.1.0
+Bygger videre på Mistra-Fiske-1.0.1-DOCKER-ONE-UPLOAD.zip.
+Sammenlignet med Vestfjella STABLE 1.3: kartbevegelse -> ny punktberegning.
+Mistra bruker NVE-elvelinje, ikke Vestfjellas innsjoepolygoner eller navn.
+Ingen nye fiskehølnavn, fangster, dybder eller nøkkelverdier er diktet opp.
+Hovedendringer: public/river-points.js, public/app.js, public/index.html,
+public/style.css, public/sw.js, server.js (NVE objekttype), test/river-points.test.js.
+Versjonsfelter og kontrollscript er oppdatert. Alle egne agnbilder er beholdt.
+Datakilde: https://kart.nve.no/enterprise/rest/services/Elvenett1/MapServer/2
+Dokumentasjon: https://leafletjs.com/reference.html
