@@ -8,11 +8,12 @@ test.after(async()=>{global.fetch=nativeFetch;delete process.env.NVE_API_KEY;awa
 test.afterEach(()=>{global.fetch=nativeFetch;});
 const request=p=>nativeFetch(base+p);
 test('Health, guide and all entry records load locally',async()=>{
- const health=await (await request('/api/health')).json();assert.equal(health.ok,true);assert.equal(health.app,'Mistra Fiske');assert.equal(health.version,'1.1.0');
+ const health=await (await request('/api/health')).json();assert.equal(health.ok,true);assert.equal(health.app,'Mistra Fiske');assert.equal(health.version,'1.2.0');assert.equal(health.maxVisibleRiverPoints,10);
  const g=await (await request('/api/guide')).json();assert.equal(g.reaches.length,8);
 });
-test('No NVE key gives configuration status, never sample data',async()=>{
- delete process.env.NVE_API_KEY;const j=await(await request('/api/hydrology')).json();assert.equal(j.available,false);assert.equal(j.needsKey,true);assert.ok(!j.discharge);
+test('No NVE key automatically uses official VEPS/HYDRA observations',async()=>{
+ delete process.env.NVE_API_KEY;const calls=[];global.fetch=async(u)=>{calls.push(String(u));assert.match(String(u),/vepsapi\.nve\.no\/timeseriesdata\/read/);return {ok:true,json:async()=>({locations:[{station_id:'2.267.0',elements:[{parameter_name:'discharge',parameter_key:1001,data:[{reference_time:'2026-09-18T10:00:00Z',quality:1,values:[14.2]}]},{parameter_name:'stage',parameter_key:1000,data:[{reference_time:'2026-09-18T10:00:00Z',quality:1,values:[290.42]}]}]}]})};};
+ const j=await S.hydrology();assert.equal(j.available,true);assert.equal(j.discharge.at(-1).value,14.2);assert.equal(j.stage.at(-1).value,290.42);assert.match(j.source,/VEPS \/ HYDRA/);assert.equal(calls.length,1);
 });
 test('Static frontend and all lure images are served with correct types',async()=>{
  const h=await request('/');assert.equal(h.status,200);assert.match(h.headers.get('content-type'),/text\/html/);assert.equal(h.headers.get('cache-control'),'no-store');
@@ -33,10 +34,14 @@ test('MET parser distinguishes hourly and six-hour rain totals',()=>{
 test('Failed external weather does not invent temperatures',async()=>{
  global.fetch=async()=>{throw new Error('offline')};const j=await S.weather(61.701,11.22);assert.equal(j.available,false);assert.ok(!j.series);
 });
-test('NVE flow uses fixed station, secret header, and tolerates no temperature series',async()=>{
- process.env.NVE_API_KEY='test-key-not-real';const calls=[];global.fetch=async(u,o)=>{calls.push({u:String(u),o});if(String(u).includes('2.695.0'))throw new Error('unavailable temp');return {ok:true,json:async()=>({data:[{stationId:'2.267.0',parameter:1001,observations:[{time:'2026-07-01T10:00:00Z',value:12}]},{stationId:'2.267.0',parameter:1000,observations:[{time:'2026-07-01T10:00:00Z',value:290.3}]}]})};};
- const j=await S.hydrology();assert.equal(j.available,true);assert.equal(j.discharge[0].value,12);assert.equal(j.temperature.length,0);assert.equal(calls.length,2);assert.ok(calls.every(x=>x.o.headers['X-API-Key']==='test-key-not-real'));
+test('HydAPI key, when present, uses fixed Mistra station and never exposes the secret',async()=>{
+ process.env.NVE_API_KEY='test-key-not-real';const calls=[];global.fetch=async(u,o)=>{calls.push({u:String(u),o});assert.match(String(u),/StationId=2.267.0/);return {ok:true,json:async()=>({data:[{stationId:'2.267.0',parameter:1001,observations:[{time:'2026-07-01T10:00:00Z',value:12}]},{stationId:'2.267.0',parameter:1000,observations:[{time:'2026-07-01T10:00:00Z',value:290.3}]}]})};};
+ const j=await S.hydrology();assert.equal(j.available,true);assert.equal(j.discharge[0].value,12);assert.equal(j.stage[0].value,290.3);assert.equal(calls.length,1);assert.equal(calls[0].o.headers['X-API-Key'],'test-key-not-real');
  const h=JSON.stringify(await(await request('/api/health')).json());assert.ok(!h.includes('test-key-not-real'));
+});
+test('VEPS parser handles nested value arrays, orders timestamps, and ignores other stations',()=>{
+ const raw={locations:[{station_id:'2.267.0',elements:[{parameter_name:'discharge',parameter_key:1001,data:[{reference_time:'2026-09-18T11:00:00Z',quality:1,values:[[15.1]]},{reference_time:'2026-09-18T10:00:00Z',quality:2,values:[14.8]}]}]},{station_id:'9.9.9',elements:[{parameter_name:'discharge',parameter_key:1001,data:[{reference_time:'2026-09-18T12:00:00Z',values:[99]}]}]}]};
+ const rows=S.parseVepsSeries(raw,'discharge');assert.deepEqual(rows.map(x=>x.value),[14.8,15.1]);assert.equal(rows[0].quality,2);
 });
 test('River parser only accepts lines wholly inside Mistra region',()=>{
  const good={attributes:{objectid:1,elvenavn:'Mistra'},geometry:{paths:[[[11.3,61.75],[11.31,61.76]]]}};

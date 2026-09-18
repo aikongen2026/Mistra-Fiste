@@ -25,7 +25,7 @@ let riverIndex=null,riverMarkers=new Map(),visibleRiverPoints=[],selectedRiverPo
 let pointLayer=null,pointTimer=null,lastPointSignature='',riverLoadingJob=null,riverLoadError=null;
 function pointReach(point){
   const near=(guide?.reaches||[]).map(r=>({r,d:M.distance(point,getLocation(r))})).filter(x=>x.d!==null&&x.d<=1200).sort((a,b)=>a.d-b.d)[0];
-  return {id:point.id,name:point.kind==='bend'?'Mistra - sving i elvelinja':'Mistra - elvepunkt',section:'boundary',access:'unknown',habitat:'unconfirmed',months:[5,6,7,8,9],
+  return {id:point.id,name:point.kind==='bend'?'Mistra - sving i elvelinja':'Mistra - elvepunkt',section:'boundary',access:near?.r?.access||'unknown',habitat:'unconfirmed',months:[5,6,7,8,9],
     sources:['nve-river','hooked','fishspot'],
     description:'Kartberegnet s\u00f8kepunkt p\u00e5 NVEs elvelinje. Ikke en dokumentert fiskeh\u00f8l, parkering eller trygg vadeplass.',
     tactic:point.kind==='bend'?'Unders\u00f8k svingen fra trygg bredde. Se etter faktiske str\u00f8mskiller og roligere lommer; kartlinjen alene viser ikke disse.':'Unders\u00f8k denne delen av elva fra trygg bredde. Begynn n\u00e6rt land og vurder str\u00f8m og dybde p\u00e5 stedet.',
@@ -40,18 +40,17 @@ function pointRank(point){
 function riverPointContext(point){return {...context(point.reach||pointReach(point)),date:date().toISOString()};}
 function riverPointPopup(point){
   const l=M.rankLures(catalog,riverPointContext(point),lureOverrides)[0];
-  return `<b>P${point.number} \u00b7 ${esc(point.reach.name)}</b><small>${point.planning?'PLANLEGGING - kontroller sesongen':'Kartberegnet s\u00f8kepunkt - avklar fiskekort'}</small><p>${esc(point.reason)}</p>${l?`<div class="point-popup-lure"><img class="zoomable-lure" src="${esc(l.image)}" alt="${esc(l.name)}" tabindex="0" role="button"><span>${esc(l.name)}</span></div>`:''}<small>Modellprioritet ${point.score}/100. Ikke fangstsannsynlighet, elvedybde eller vadeplass.</small><button data-river-details="${esc(point.id)}">Sluk og fisker\u00e5d</button>`;
+  return `<b>P${point.number} · ${esc(point.reach.name)}</b><small>${point.planning?'PLANLEGGING':'Kartberegnet elvepunkt'} · ${point.score}/100</small>${l?`<div class="point-popup-lure"><img class="zoomable-lure" src="${esc(l.image)}" alt="${esc(l.name)}" tabindex="0" role="button"><span>${esc(l.name)}</span></div>`:''}<button data-river-details="${esc(point.id)}">Sluk og fiskeråd</button>`;
 }
 function renderRiverPointRules(){
   const main=M.season('main',date()),north=M.season('north',date());
   const closed=main.state==='closed'&&north.state==='closed';
-  $('ruleContent').innerHTML=`<div class="rule-title"><h3>${closed?'\u00d8rretfisket er stengt':'Avklar fiskekort og sesong'}</h3><span class="rule-badge ${closed?'closed':''}">${closed?'PLANLEGGING':'KARTPUNKT'}</span></div><p>Et punkt p\u00e5 elvelinja avgj\u00f8r ikke hvilket kortomr\u00e5de du er i.</p><p><b>Mistra Elvelag:</b> ${esc(main.label)}. ${esc(main.detail)}</p><p><b>Nordre Mistra:</b> ${esc(north.label)}. ${esc(north.detail)}</p><p class="source-details">Punktene beholdes ogs\u00e5 utenfor sesongen for turplanlegging. Grense, adkomst og fiskerett er ikke beregnet fra elvelinja.</p>${sourceLinks(['rules-main','rules-north','rules-pdf'])}`;
+  $('ruleContent').innerHTML=`<div class="rule-title"><h3>${closed?'Ørretfisket er stengt':'Kontroller kortområde'}</h3><span class="rule-badge ${closed?'closed':''}">${closed?'PLANLEGGING':'SESONG'}</span></div><p><b>Mistra Elvelag:</b> ${esc(main.label)}. ${esc(main.detail)}</p><p><b>Nordre Mistra:</b> ${esc(north.label)}. ${esc(north.detail)}</p>`;
 }
 function renderRiverPointDetails(){
-  const p=pointRank(selectedRiverPoint),r=p.reach,ctx=riverPointContext(p),target=M.sourceTarget(ctx),lures=M.rankLures(catalog,ctx,lureOverrides),l=lures[0];
-  $('selected').innerHTML=`<span class="card-label">VALGT KARTBEREGNET ELVEPUNKT</span><h2>${esc(r.name)}</h2><span class="chip">Modellprioritet ${p.score}/100</span><span class="chip">${p.planning?'Planlegging / kontroller sesong':'Fiskekort m\u00e5 avklares'}</span><p>${esc(r.description)}</p><p><b>Start her:</b> ${esc(r.tactic)}</p><p class="source-details">${p.lat.toFixed(6)}, ${p.lon.toFixed(6)} \u00b7 Adkomst er uavklart. ${r.nearby?'N\u00e6rmeste kildeomtalte utgangspunkt: '+esc(r.nearby.name)+' (ca. '+fmt(r.nearby.distance,0)+' m i luftlinje). Det betyr ikke at hele strekningen har enkel adkomst.':''}</p><button class="secondary" data-river-focus="${esc(p.id)}">Vis valgt elvepunkt</button><div class="notice good-note"><b>Det kildene foresl\u00e5r</b><p>${esc(target.text)}</p>${sourceLinks(target.sources)}</div>${l?`<div class="lure-pick"><img class="zoomable-lure" src="${esc(l.image)}" alt="${esc(l.name)}" tabindex="0" role="button"><div><span class="own-tag">N\u00c6RMEST I DIN EGEN ESKE</span><b>${esc(l.name)}</b><p>${esc(l.why)}</p><small>${esc(l.matchCaveat)}</small></div></div><div class="alternatives">${lures.slice(1).map(x=>`<article class="alternative"><img class="zoomable-lure" src="${esc(x.image)}" alt="${esc(x.name)}" tabindex="0" role="button"><b>${esc(x.name)}</b><small>${esc(M.methodLabel[x.family])}</small></article>`).join('')}</div>`:'<p class="muted">Mark er valgt. Ingen oppdiktet agnfotografi vises.</p>'}<p><b>Teknikkforslag:</b> ${esc(M.tactic(l?.family||'worm',ctx.flow))}</p><p class="source-details">${esc(p.reason)} Prioriteten er en forsiktig modell for utforsking, ikke dokumentert fangstrate. Elvelinjen viser ikke vanndybde, fisk, vannbredde eller trygg adkomst.</p>${sourceLinks(['nve-river','hooked','fishspot'])}`;
-}
-function scheduleRiverPoints(){
+  const p=pointRank(selectedRiverPoint),ctx=riverPointContext(p),target=M.sourceTarget(ctx),lures=M.rankLures(catalog,ctx,lureOverrides),l=lures[0];
+  $('selected').innerHTML=`<span class="card-label">P${p.number||''} · ANBEFALT ELVEPUNKT</span><div class="selected-title-row"><h2>${p.kind==='bend'?'Sving i Mistra':'Mistra – elvestrekning'}</h2><strong class="score-badge">${p.score}/100</strong></div><div class="selected-chips"><span class="chip">${p.planning?'Planlegging':'Kontroller kortområde'}</span><span class="chip">${esc(accessLabel[p.reach.access]||'Tilkomst uavklart')}</span></div>${l?`<div class="lure-pick hero-lure"><img class="zoomable-lure" src="${esc(l.image)}" alt="${esc(l.name)}" tabindex="0" role="button"><div><span class="own-tag">FØRSTEVALG FRA DIN SLUKBOKS</span><b>${esc(l.name)}</b><p>${esc(l.why)}</p></div></div>${lures.length>1?`<div class="alt-heading">Gode alternativer fra slukboksen</div><div class="alternatives">${lures.slice(1,4).map(x=>`<article class="alternative"><img class="zoomable-lure" src="${esc(x.image)}" alt="${esc(x.name)}" tabindex="0" role="button"><b>${esc(x.name)}</b><small>${esc(M.methodLabel[x.family])}</small></article>`).join('')}</div>`:''}`:'<p class="muted">Mark er valgt som metode.</p>'}<div class="quick-advice"><b>Hva som passer i Mistra</b><p>${esc(target.text)}</p><b>Fisk slik</b><p>${esc(M.tactic(l?.family||'worm',ctx.flow))}</p></div>`;
+}function scheduleRiverPoints(){
   if(!map||!guide)return;
   // One rebuild after movement settles; no upstream/API lookup on map movements.
   if(pointTimer)return;
@@ -61,47 +60,49 @@ function pointIcon(point){return L.divIcon({className:'river-point-marker',html:
 function emptyPointText(reason){return ({
   'no-geometry':riverLoadError||'Venter p\u00e5 elvelinja. Lagrede elvedata brukes automatisk n\u00e5r de finnes.',
   'outside-river':'Ingen del av Mistra-elvelinja i kartutsnittet. Flytt langs elva eller trykk Hele Mistra.',
-  'radius-filter':'Ingen elvepunkter i utsnittet innen valgt avstand fra base. Flytt kartet til basen eller \u00f8k avstanden.',
-  'access-filter':'Adkomst er ikke dokumentert for de kartberegnede elvepunktene. Velg Tilkomst: Alle / Uavklart. De kildeomtalte utgangspunktene beholder tilkomstfilteret.',
+  'radius-filter':'Ingen elvepunkter i utsnittet innen valgt avstand fra referansepunktet. Klikk nærmere elva eller øk avstanden.',
+  'access-filter':'Ingen av de 10 beste punktene matcher valgt tilkomst. Velg Alle / Uavklart eller flytt kartet.',
   'invalid-view':'Kartutsnittet er ikke klart enn\u00e5.',
-  'hidden':'Elvepunkter er skjult. Trykk Elvepunkter over kartet for \u00e5 vise dem igjen.'
+  'hidden':'Elvepunktene lastes automatisk.'
 })[reason]||'Ingen aktuelle punkter i dette kartutsnittet.';}
 function updateRiverPoints(){
   if(!map||!guide||!RP)return;
-  const b=map.getBounds(),on=$('pointsToggle').getAttribute('aria-pressed')!=='false';
-  const result=RP.suggest(riverIndex,{bounds:{west:b.getWest(),south:b.getSouth(),east:b.getEast(),north:b.getNorth()},zoom:map.getZoom(),base:currentBase(),radius:Number($('radius').value),access:$('access').value});
-  const rows=on?result.points.map(pointRank).sort((a,b)=>b.score-a.score||a.lat-b.lat||a.lon-b.lon):[];
+  const b=map.getBounds();
+  const result=RP.suggest(riverIndex,{bounds:{west:b.getWest(),south:b.getSouth(),east:b.getEast(),north:b.getNorth()},zoom:map.getZoom(),base:currentBase(),radius:Number($('radius').value),access:'all',limit:36,spacingPx:50});
+  const accessFilter=$('access').value;const rows=result.points.map(pointRank).filter(p=>accessFilter==='all'||p.reach.access===accessFilter).sort((a,b)=>b.score-a.score||b.bendDegrees-a.bendDegrees||a.lat-b.lat||a.lon-b.lon).slice(0,10);
   rows.forEach((p,i)=>p.number=i+1);visibleRiverPoints=rows;
   $('map').dataset.riverPointCount=String(rows.length);
   $('riverPointCount').textContent=rows.length+' punkter';
-  const reason=on?result.stats.reason:'hidden';
-  $('riverPointSummary').textContent=rows.length?`${rows.length} kartberegnede s\u00f8kepunkter i kartutsnittet. ${rows[0].planning?'Vises for planlegging utenfor / uavklart sesong.':'Avklar kortomr\u00e5de f\u00f8r fiske.'}${result.stats.missingBase?' Avstand trenger en base eller et ferskt GPS-signal.':''}`:emptyPointText(reason);
+  const reason=rows.length?null:(accessFilter!=='all'?'access-filter':result.stats.reason);
+  $('riverPointSummary').textContent=rows.length?`${rows.length} beste kartberegnede punkter i dette utsnittet. Oppdateres automatisk når kartet flyttes.${result.stats.missingBase?' Klikk i kartet for å sette referansepunkt for avstandsfilteret.':''}`:emptyPointText(reason);
   const sourceState=riverData?.stale?'Lagret':'Hentet';
-  $('mapNotice').textContent=riverIndex?.segments.length?`${sourceState} NVE-elvelinje \u00b7 ${rows.length} s\u00f8kepunkter${riverData?.incomplete?' \u00b7 delvis kartgrunnlag':''}. ${rows.length?'Oppdateres n\u00e5r kartet flyttes.':emptyPointText(reason)}`:emptyPointText('no-geometry');
-  const sig=JSON.stringify([on,rows.map(p=>[p.id,p.score,p.planning]),selectedRiverPoint?.id,$('method').value,$('flow').value,$('clarity').value,$('goal').value]);
+  $('mapNotice').textContent=riverIndex?.segments.length?`${sourceState} NVE-elvelinje · ${rows.length} anbefalte punkter i utsnittet. Klikk kartet for å flytte referansepunktet.`:emptyPointText('no-geometry');
+  const selectionWasVisible=selectedRiverPoint&&rows.some(x=>x.id===selectedRiverPoint.id);
+  if(rows.length&&!selectionWasVisible){selectedRiverPoint=rows[0];renderSelected();renderRules();}
+  const sig=JSON.stringify([rows.map(p=>[p.id,p.score,p.planning]),selectedRiverPoint?.id,$('method').value,$('flow').value,$('clarity').value,$('goal').value,currentBase()?.lat,currentBase()?.lon]);
   if(sig===lastPointSignature)return;lastPointSignature=sig;
-  if(rows.length)setStatus(`${rows.length} elvepunkter i kartutsnittet - ${rows[0].planning?'planlegging':'kontroller sesong og fiskekort'}.`);
+  if(rows.length)setStatus(`${rows.length} beste elvepunkter i kartutsnittet - oppdateres automatisk.`);
   const ids=new Set(rows.map(p=>p.id));
   for(const [id,marker] of riverMarkers){if(!ids.has(id)){pointLayer.removeLayer(marker);riverMarkers.delete(id);}}
   for(const p of rows){
     let marker=riverMarkers.get(p.id);
-    if(!marker){marker=L.marker([p.lat,p.lon],{icon:pointIcon(p),title:`P${p.number} - ${p.reach.name}`,riseOnHover:true,zIndexOffset:500}).addTo(pointLayer);marker.on('click',()=>selectRiverPoint(p.id,false));riverMarkers.set(p.id,marker);}
+    if(!marker){marker=L.marker([p.lat,p.lon],{icon:pointIcon(p),title:`P${p.number} - ${p.reach.name}`,riseOnHover:true,zIndexOffset:500,bubblingMouseEvents:false}).addTo(pointLayer);marker.on('click',()=>selectRiverPoint(p.id,false,true));riverMarkers.set(p.id,marker);}
     else marker.setIcon(pointIcon(p));
-    if(!marker.getPopup())marker.bindPopup(riverPointPopup(p),{maxWidth:310,autoPan:false});else marker.setPopupContent(riverPointPopup(p));
-    marker.bindTooltip(`P${p.number} - ${p.kind==='bend'?'Sving i elvelinja':'S\u00f8kepunkt'} - ${p.score}/100${p.planning?' (planlegging)':''}`,{direction:'top'});
+    marker.unbindPopup();
+    marker.bindTooltip(`P${p.number} - ${p.kind==='bend'?'Sving':'Elvepunkt'} - ${p.score}/100`,{direction:'top'});
   }
   const oldScroll=$('riverPointList').scrollTop;
-  $('riverPointList').innerHTML=rows.map(p=>`<button class="river-point-row ${selectedRiverPoint?.id===p.id?'active':''}" data-river-point="${esc(p.id)}" aria-pressed="${selectedRiverPoint?.id===p.id}"><span class="rnum">P${p.number}</span><span><b>${p.kind==='bend'?'Sving i elvelinja':'S\u00f8k langs elvestrekningen'}</b><small>${p.planning?'PLANLEGGING':'KARTBEREGNET'} \u00b7 tilkomst uavklart${p.distanceM!==null?' \u00b7 '+fmt(p.distanceM,0)+' m fra base':''}</small></span><strong>${p.score}/100</strong></button>`).join('');
+  $('riverPointList').innerHTML=rows.map(p=>`<button class="river-point-row ${selectedRiverPoint?.id===p.id?'active':''}" data-river-point="${esc(p.id)}" aria-pressed="${selectedRiverPoint?.id===p.id}"><span class="rnum">P${p.number}</span><span><b>${p.kind==='bend'?'Sving i elvelinja':'Søk langs elvestrekningen'}</b><small>${p.planning?'PLANLEGGING':'KARTBEREGNET'}${p.distanceM!==null?' · '+fmt(p.distanceM,0)+' m fra kartklikk / Live':''}</small></span><strong>${p.score}/100</strong></button>`).join('')||'<p class="muted">Ingen Mistra-elvelinje i dette utsnittet.</p>';
   $('riverPointList').scrollTop=oldScroll;
 }
-function selectRiverPoint(id,focus=false,details=false){
+function selectRiverPoint(id,focus=false,details=true){
   const p=visibleRiverPoints.find(p=>p.id===id)||(selectedRiverPoint?.id===id?selectedRiverPoint:null);if(!p)return;
   ++selectionGeneration;selectedRiverPoint=p;
   if(focus){pauseFollowing();map.stop();map.setView([p.lat,p.lon],Math.max(16,map.getZoom()),{animate:false});}
   focusLayer.clearLayers();L.circleMarker([p.lat,p.lon],{radius:20,color:'#f2c94c',weight:2,fillOpacity:.04,interactive:false}).addTo(focusLayer);
-  renderSelected();renderRules();updateRiverPoints();riverMarkers.get(id)?.openPopup();refreshWeather();
+  renderSelected();renderRules();updateRiverPoints();refreshWeather();
   setStatus('Elvepunkt valgt - '+(p.planning?'planlegging.':'kontroller fiskekort og adkomst.'));
-  if(details){const aside=$('results'),card=$('selectedCard');if(window.innerWidth>=1000)aside.scrollTo({top:card.offsetTop-aside.offsetTop-10,behavior:'smooth'});else card.scrollIntoView({block:'start',behavior:'smooth'});}
+  if(details){const aside=$('results'),card=$('selectedCard');if(window.innerWidth>=1000)aside.scrollTo({top:0,behavior:'smooth'});else card.scrollIntoView({block:'start',behavior:'smooth'});}
 }
 
 const accessLabel={easier:'Enklere utgangspunkt',walk:'Gange / sti',mixed:'Varierende terreng',difficult:'Krevende terreng',unknown:'Adkomst uavklart'};
@@ -116,16 +117,10 @@ function getLocation(r){const p=places[r.id]||r.anchor;return p&&M.finite(p.lat)
 function sourceLinks(ids=[]){return `<div class="source-links">${ids.map(id=>guide.sources.find(s=>s.id===id)).filter(Boolean).map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a>`).join('')}</div>`;}
 function context(r){return {reach:r,goal:$('goal').value,method:$('method').value,date:date().toISOString(),...observations()};}
 function ranked(){const b=currentBase(),radius=Number($('radius').value),ac=$('access').value;return guide.reaches.map(r=>({...r,...M.rankReach(r,date(),$('goal').value,currentWeather(),observations()),dist:M.distance(b,getLocation(r))})).filter(r=>(ac==='all'||r.access===ac)&&(radius===0||!b||(r.dist!==null&&r.dist<=radius))).sort((a,b)=>Number(b.rule.open)-Number(a.rule.open)||b.score-a.score||a.name.localeCompare(b.name,'nb'));}
-function render(){if(!guide)return;const rows=ranked();$('placeCount').textContent=rows.length+' av '+guide.reaches.length;
- $('reachList').innerHTML=rows.map((r,i)=>`<button class="reach-row ${r.id===selectedId?'active':''}" data-reach="${r.id}" aria-pressed="${r.id===selectedId}"><span class="rnum">${i+1}</span><span><strong>${esc(r.name)}</strong><small>${esc(accessLabel[r.access])}${r.dist!==null?' - '+fmt(r.dist/1000)+' km i luftlinje':''}${Number($('radius').value)>0&&r.dist===null?' - avstand ukjent':''}</small><small>${esc(r.sourceLevel)}</small></span><span class="rs">${r.rule.open?r.score+'/100':r.rule.state==='closed'?'Stengt':'Avklar'}</span></button>`).join('')||'<p class="muted">Ingen strekninger passer filteret. Velg Alle / Ingen grense.</p>';
- const b=currentBase();if(Number($('radius').value)>0&&!b)setStatus('Avstandsfilteret trenger base eller et ferskt Live GPS-signal.');
- renderSelected();renderRules();renderWeather();drawPlaces();drawBase();scheduleRiverPoints();
-}
+function render(){if(!guide)return;const b=currentBase();if(Number($('radius').value)>0&&!b)setStatus('Avstandsfilter: klikk i kartet for referansepunkt, eller bruk Live GPS.');renderSelected();renderRules();renderWeather();drawBase();scheduleRiverPoints();}
 function renderRules(){if(selectedRiverPoint){renderRiverPointRules();return;}const r=selectedReach(),s=M.season(r.section,date());$('ruleContent').innerHTML=`<div class="rule-title"><h3>${esc(s.label)}</h3><span class="rule-badge ${s.state}">${s.open?'ÅPEN SESONG':'PLANLEGGING'}</span></div><p>${esc(s.detail)}</p><p class="source-details">${esc(r.name)} - ${when(date())}. Kontroller rett kort og gjeldende regler før fiske. Unntak for barn og fullstendige vilkår står i regel-PDF-en.</p>${sourceLinks(r.section==='north'?['rules-north']:r.section==='boundary'?['rules-main','rules-north']:['rules-main','rules-pdf'])}`;}
-function renderSelected(){if(selectedRiverPoint){renderRiverPointDetails();return;}const r=selectedReach();if(!r)return;const rank=M.rankReach(r,date(),$('goal').value,currentWeather(),observations()),ctx=context(r),target=M.sourceTarget(ctx),lures=M.rankLures(catalog,ctx,lureOverrides),loc=getLocation(r);
- const first=lures[0];
- $('selected').innerHTML=`<span class="card-label">VALGT STREKNING</span><h2>${esc(r.name)}</h2><span class="chip">${esc(accessLabel[r.access])}</span><span class="chip">${rank.rule.open?'Modellprioritet '+rank.score+'/100':'Fisket må avklares / utenfor sesong'}</span><p>${esc(r.description)}</p><p><b>Arbeidsforslag:</b> ${esc(r.tactic)}</p><div class="selected-actions"><button data-focus="${r.id}">${loc?'Vis utgangspunkt på kart':'Finn kildeomtalt utgangspunkt'}</button>${loc?`<button class="secondary" data-nav="${r.id}">Naviger til utgangspunkt</button>`:''}</div><p class="source-details" id="placeResult">${loc?esc(loc.notice||loc.label||'Områdereferanse - ikke nøyaktig fiskehøl.'):'Kildene og kartoppslaget må kunne stedfeste området. Ukjente punkter plasseres ikke vilkårlig.'}</p><div class="notice good-note"><b>Det kildene foreslår</b><p>${esc(target.text)}</p>${sourceLinks(target.sources)}</div>${first?`<div class="lure-pick"><img class="zoomable-lure" src="${first.image}" alt="${esc(first.name)}" tabindex="0" role="button"><div><span class="own-tag">NÅRMEST I DIN EGEN ESKE</span><b>${esc(first.name)}</b><p>${esc(first.why)}</p><small>${esc(first.matchCaveat)}</small></div></div><div class="alternatives">${lures.slice(1).map(l=>`<article class="alternative"><img class="zoomable-lure" tabindex="0" role="button" src="${l.image}" alt="${esc(l.name)}"><b>${esc(l.name)}</b><small>${esc(M.methodLabel[l.family])} - alternativ</small></article>`).join('')}</div><p class="source-details">Matchen sammenligner type/farge, ikke sannsynlighet for fangst. Farge og form fra foto er ikke bevis for modell, lengde eller flyteevne.</p>`:'<p class="muted">Mark omtales i kildene. Ingen markfoto legges inn som om det var fra slukesken din.</p>'}<p><b>Teknikkforslag:</b> ${esc(M.tactic(first?.family||'worm',ctx.flow))}</p>${rank.reasons.length?`<p class="source-details"><b>Modellens begrunnelse:</b> ${esc(rank.reasons.join('. '))}. ${rank.weatherApplied?'Timevarsel brukes som et svakt tillegg.':'Vær for valgt tidspunkt mangler; ingen oppdiktede værverdier brukes.'}</p>`:''}${sourceLinks(r.sources)}`;
-}
+function renderSelected(){if(selectedRiverPoint){renderRiverPointDetails();return;}$('selected').innerHTML='<span class="card-label">ANBEFALT PUNKT</span><h2>Venter på elvepunkter</h2><p class="muted">De 10 beste punktene i kartutsnittet velges automatisk når NVEs elvelinje er klar.</p>';}
+
 function initMap(){if(!window.L){$('map').innerHTML='<p class="notice">Kartbiblioteket mangler. Kjør npm install i prosjektet / deploy på Render. Guiden er fortsatt tilgjengelig.</p>';return;}
  const c=Array.isArray(ui.center)&&ui.center.length===2&&ui.center.every(M.finite)?ui.center:guide.map.center;
  map=L.map('map',{zoomControl:true}).setView(c,Number.isFinite(ui.zoom)?ui.zoom:guide.map.zoom);
@@ -139,19 +134,19 @@ function initMap(){if(!window.L){$('map').innerHTML='<p class="notice">Kartbibli
  const el=document.querySelector('.map-wrap');new ResizeObserver(()=>map.invalidateSize({pan:false})).observe(el);
  map.on('dragstart',()=>{if(liveActive){follow=false;$('follow').hidden=false;}});
  map.on('moveend zoomend resize',()=>{saveUI();scheduleRiverPoints();});
- map.on('contextmenu',e=>{base={lat:e.latlng.lat,lon:e.latlng.lng};saveUI();render();setStatus('Manuell base satt.');});
+ map.on('click',e=>{base={lat:e.latlng.lat,lon:e.latlng.lng};saveUI();drawBase();scheduleRiverPoints();setStatus('Kartklikk satt som referansepunkt. De 10 beste punktene oppdateres.');});
  drawTrack();drawPlaces();drawBase();
 }
-function drawPlaces(){if(!map||!placeLayer||!guide)return;placeLayer.clearLayers();markers={};if($('placesToggle').getAttribute('aria-pressed')==='false')return;
- ranked().forEach((r,i)=>{const p=getLocation(r);if(!p)return;const icon=L.divIcon({className:'',html:`<div class="map-reference ${r.id===selectedId?'selected':''}">${i+1}</div>`,iconSize:[30,30],iconAnchor:[15,15]});const m=L.marker([p.lat,p.lon],{icon,title:r.name}).bindPopup(`<b>${esc(r.name)}</b><small>${esc(p.notice||p.label||'Utgangspunkt, ikke fiskehøl')}</small><button data-reach="${r.id}">Åpne fiskeguiden</button>`);m.on('click',()=>selectReach(r.id,false));m.addTo(placeLayer);markers[r.id]=m;});}
-function drawBase(){if(!map)return;if(radiusLayer){map.removeLayer(radiusLayer);radiusLayer=null;}const b=currentBase(),radius=Number($('radius').value);$('setBase').textContent=base?'Base satt - fjern':'Sett base';$('setBase').setAttribute('aria-pressed',String(!!base));if(!b)return;radiusLayer=L.layerGroup().addTo(map);L.circleMarker([b.lat,b.lon],{radius:6,color:'#f2c94c',fillOpacity:.8}).addTo(radiusLayer);if(radius>0)L.circle([b.lat,b.lon],{radius,color:'#f2c94c',weight:1,dashArray:'6 6',fillOpacity:.025,interactive:false}).addTo(radiusLayer);}
+function drawPlaces(){if(placeLayer)placeLayer.clearLayers();markers={};}
+function drawBase(){if(!map)return;if(radiusLayer){map.removeLayer(radiusLayer);radiusLayer=null;}const b=currentBase(),radius=Number($('radius').value);if(!b)return;radiusLayer=L.layerGroup().addTo(map);L.circleMarker([b.lat,b.lon],{radius:7,color:'#fff',weight:2,fillColor:'#f2c94c',fillOpacity:.95,interactive:false}).bindTooltip(liveActive?'Live GPS':'Kartklikk – avstandsreferanse',{direction:'top'}).addTo(radiusLayer);if(radius>0)L.circle([b.lat,b.lon],{radius,color:'#f2c94c',weight:1,dashArray:'6 6',fillOpacity:.025,interactive:false}).addTo(radiusLayer);}
 function displayRiver(data){
  if(!map||!data?.features?.length)return;
  riverIndex=RP.createIndex(data);
  if(riverLayer)map.removeLayer(riverLayer);
  riverLayer=L.geoJSON(data,{style:()=>({color:'#56b5ff',weight:4,opacity:.85}),onEachFeature:(f,l)=>l.on('click',e=>{
+   if(e.originalEvent)L.DomEvent.stopPropagation(e.originalEvent);
    const q=RP.nearest(riverIndex,{lat:e.latlng.lat,lon:e.latlng.lng},200);
-   if(q){selectedRiverPoint=q;++selectionGeneration;renderSelected();renderRules();focusLayer.clearLayers();L.circleMarker([q.lat,q.lon],{radius:16,color:'#f2c94c',weight:2,interactive:false}).addTo(focusLayer);setStatus('Valgt punkt p\u00e5 elvelinja. Se sluk og r\u00e5d i panelet.');refreshWeather();scheduleRiverPoints();}
+   if(q){const rankedPoint=pointRank(q);rankedPoint.number=visibleRiverPoints.findIndex(x=>x.id===q.id)+1;if(rankedPoint.number<1)rankedPoint.number=1;selectedRiverPoint=rankedPoint;++selectionGeneration;renderSelected();renderRules();focusLayer.clearLayers();L.circleMarker([q.lat,q.lon],{radius:16,color:'#f2c94c',weight:2,interactive:false}).addTo(focusLayer);const aside=$('results');if(window.innerWidth>=1000)aside.scrollTo({top:0,behavior:'smooth'});setStatus('Elvepunkt valgt - sluk og fiskeråd vises til høyre.');refreshWeather();scheduleRiverPoints();}
  })});
  if($('riverToggle').getAttribute('aria-pressed')!=='false')riverLayer.addTo(map);
  scheduleRiverPoints();
@@ -186,14 +181,15 @@ function renderWeather(){const w=currentWeather();$('weather').innerHTML=w?[['Ti
  $('forecastWindows').innerHTML=windows.length?'<p class="source-details"><b>Modellens tidsvinduer (ikke bitegaranti)</b></p>'+windows.map(x=>`<div class="forecast-row"><span>${when(x.time)}</span><span>${x.score}/100</span><button class="secondary" data-time="${x.time}">Velg</button></div>`).join(''):'';
 }
 function metric(label,p,unit){if(!p)return `<div class="metric"><span>${label}</span><strong>Ingen data</strong></div>`;const age=(Date.now()-+new Date(p.time))/3600000;return `<div class="metric"><span>${label}</span><strong>${fmt(p.value,unit==='m'?3:2)} ${unit}</strong><small>${when(p.time)}${age>6?' - eldre enn 6 timer':''}</small></div>`;}
-function renderHydro(){const d=hydroData;if(!d?.available){$('hydrology').innerHTML=`<p class="notice">${esc(d?.error||'NVE-data er ikke tilgjengelig.')}</p><p class="source-details">Appen fungerer uten nøkkel, men automatiske NVE-målinger krever gratis nøkkel i serverens NVE_API_KEY. Sildre-lenken nedenfor fungerer uavhengig av dette.</p>`;$('flowChart').innerHTML='';return;}
- const tr=d.trend3h,rapid=tr&&M.finite(tr.percent)&&tr.percent>30;const age=Date.now()-+new Date(d.discharge?.at(-1)?.time||0);$('hydrology').innerHTML=`${d.stale?'<p class="notice">Lagrede målinger: oppdatering feilet. Kontroller tidsstemplene.</p>':''}<div class="hydro-grid">${metric('Vannføring - 2.267.0',d.discharge?.at(-1),'m3/s')}${metric('Vannstand / referansenivå',d.stage?.at(-1),'m')}${metric('Vanntemperatur - 2.695.0',d.temperature?.at(-1),'°C')}<div class="metric"><span>Endring siste 3 timer</span><strong>${tr?(tr.delta>=0?'+':'')+fmt(tr.delta,2)+' m3/s':'Ukjent'}</strong><small>${tr?when(tr.from)+' - '+when(tr.to):'Mangler sammenlignbare målinger'}</small></div></div>${rapid&&age<6*3600000?'<p class="notice">Appvarsel: vannføringen har økt over 30 % på 3 timer. Dette er en forsiktig modellgrense, ikke et offisielt flomvarsel. Hold avstand fra utsatte bredder.</p>':''}<p class="source-details">NVE HydAPI, hentet ${when(d.fetchedAt)}. Sanntidsmålingene kan være ukontrollerte.</p>`;
+function renderHydro(){const d=hydroData;if(!d?.available){if($('hydroSummary'))$('hydroSummary').textContent='Ikke tilgjengelig';$('hydrology').innerHTML=`<p class="notice">${esc(d?.error||'NVE-data er ikke tilgjengelig ved oppstart.')}</p><p class="source-details">Data hentes automatisk én gang ved oppstart. Ingen eksempelverdier fylles inn.</p>`;$('flowChart').innerHTML='';return;}
+ const latestFlow=d.discharge?.at(-1),latestStage=d.stage?.at(-1);if($('hydroSummary'))$('hydroSummary').textContent=`${latestFlow?fmt(latestFlow.value,1)+' m³/s':'--'} · ${latestStage?fmt(latestStage.value,2)+' m':'--'}`;
+ const tr=d.trend3h,rapid=tr&&M.finite(tr.percent)&&tr.percent>30;const age=Date.now()-+new Date(d.discharge?.at(-1)?.time||0);$('hydrology').innerHTML=`${d.stale?'<p class="notice">Lagrede målinger: oppdatering feilet. Kontroller tidsstemplene.</p>':''}<div class="hydro-grid">${metric('Vannføring - 2.267.0',d.discharge?.at(-1),'m3/s')}${metric('Vannstand / referansenivå',d.stage?.at(-1),'m')}<div class="metric"><span>Endring siste 3 timer</span><strong>${tr?(tr.delta>=0?'+':'')+fmt(tr.delta,2)+' m3/s':'Ukjent'}</strong><small>${tr?when(tr.from)+' - '+when(tr.to):'Mangler sammenlignbare målinger'}</small></div></div>${rapid&&age<6*3600000?'<p class="notice">Appvarsel: vannføringen har økt over 30 % på 3 timer. Dette er en forsiktig modellgrense, ikke et offisielt flomvarsel. Hold avstand fra utsatte bredder.</p>':''}<p class="source-details">${esc(d.source||'NVE')}, hentet ${when(d.fetchedAt)}. Målingene kan være foreløpige og senere korrigeres.</p>`;
  const pts=d.discharge||[];if(pts.length<2){$('flowChart').innerHTML='';return;}const t0=+new Date(pts[0].time),t1=+new Date(pts.at(-1).time),lo=Math.min(...pts.map(p=>p.value)),hi=Math.max(...pts.map(p=>p.value));const xy=pts.map(p=>(38+(+new Date(p.time)-t0)/Math.max(1,t1-t0)*340).toFixed(1)+','+(148-(p.value-lo)/Math.max(.01,hi-lo)*117).toFixed(1)).join(' ');
  $('flowChart').innerHTML=`<svg class="flow-chart" viewBox="0 0 400 180" role="img" aria-label="NVE vannføring siste tre døgn"><line x1="38" y1="150" x2="378" y2="150" stroke="currentColor" opacity=".35"/><text x="2" y="33">${fmt(hi)}</text><text x="2" y="149">${fmt(lo)}</text><text x="38" y="172">${when(pts[0].time)}</text><text x="270" y="172">${when(pts.at(-1).time)}</text><text x="38" y="15">Vannføring (m3/s)</text><polyline points="${xy}"/></svg>`;
 }
-async function refreshHydro(){try{hydroData=await fetchData('/api/hydrology',{timeout:28000,cacheKey:'mistra-hydrology-v1'});}catch(e){hydroData={available:false,error:'NVE-målinger kunne ikke hentes.'};}renderHydro();}
+async function refreshHydro(){try{hydroData=await fetchData('/api/hydrology',{timeout:28000,cacheKey:'mistra-hydrology-v2'});}catch(e){hydroData={available:false,error:'NVE-målinger kunne ikke hentes.'};}renderHydro();}
 function renderTackle(){const families=M.methodLabel;$('tackleBox').innerHTML=catalog.map(l=>{const o=lureOverrides[l.id]||{};return `<article class="lure-edit"><img class="zoomable-lure" tabindex="0" role="button" src="${l.image}" alt="${esc(l.name)}"><div><b>${esc(l.name)}</b><small class="source-details">${esc(families[l.family])}${l.weightG?' - synlig merking '+l.weightG+' g':''}</small><div class="obs-grid"><label class="field"><span>Din målte lengde (cm)</span><input type="number" min="1" max="40" step=".1" data-lure-length="${l.id}" value="${M.finite(o.lengthCm)?o.lengthCm:''}" placeholder="Ukjent"></label><label class="field"><span>Din bekreftede flyteevne</span><select data-lure-buoyancy="${l.id}">${[['unknown','Ukjent'],['floating','Flytende'],['sinking','Synkende'],['suspending','Suspenderende']].map(([v,t])=>`<option value="${v}" ${(o.buoyancy||'unknown')===v?'selected':''}>${t}</option>`).join('')}</select></label></div></div></article>`;}).join('');}
-function renderGuide(){$('guide').innerHTML=guide.strategy.map(s=>`<article class="source-entry"><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p>${sourceLinks(s.sources)}</article>`).join('');$('sources').innerHTML=guide.sources.map(s=>`<article class="source-entry"><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a><p>${esc(s.summary)}</p><small>${esc(s.kind)} Kontrollert ${esc(s.checked)}.</small></article>`).join('');}
+function renderGuide(){}
 function showLure(src,caption){$('lureViewerImage').src=src;$('lureViewerImage').alt=caption;$('lureViewerCaption').textContent=caption;const d=$('lureViewer');if(!d.open){history.pushState({mistraLure:true},'');viewerHistory=true;d.showModal();}}
 function renderLog(){$('catchList').innerHTML=logs.slice(0,8).map(x=>`<div class="catch-row"><b>${esc(x.place)}</b> - ${x.result==='catch'?'Fangst':'Ingen fangst'}${x.length?' - '+esc(x.length)+' cm':''}<br>${when(x.time)} - ${esc(x.note||'')}</div>`).join('')||'<p class="source-details">Ingen turer lagret.</p>';}
 function download(name,data,mime){const url=URL.createObjectURL(new Blob([data],{type:mime})),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);}
@@ -215,25 +211,25 @@ async function init(){try{[guide,catalog]=await Promise.all([fetchData('/api/gui
  $('tripTime').value=localInput(new Date());for(const id of ['goal','method','access','radius','mapStyle'])if(ui[id]&&[...$(id).options].some(o=>o.value===String(ui[id])))$(id).value=String(ui[id]);base=ui.base&&[ui.base.lat,ui.base.lon].every(M.finite)?ui.base:null;
  if(!Array.isArray(logs))logs=[];if(!Array.isArray(track))track=[];track=track.filter(p=>[p.lat,p.lon,p.timestamp].every(M.finite));
  initMap();renderGuide();renderTackle();renderLog();render();setStatus('Kildeguide klar - henter kart og målinger.');
- loadRiver();warmPlaces();refreshWeather();refreshHydro();
- refreshTimer=setInterval(()=>{if(document.visibilityState==='visible'){if(followNow)$('tripTime').value=localInput(new Date());refreshWeather();refreshHydro();render();}},600000);
+ loadRiver();refreshWeather();refreshHydro();
+ refreshTimer=setInterval(()=>{if(document.visibilityState==='visible'){if(followNow)$('tripTime').value=localInput(new Date());refreshWeather();render();}},600000);
  if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js',{updateViaCache:'none'}).catch(()=>{});
 }
 $('live').onclick=startLive;$('follow').onclick=()=>{follow=true;$('follow').hidden=true;drawGps();};
-$('locate').onclick=()=>{if(!navigator.geolocation){setStatus('GPS ikke tilgjengelig.');return;}navigator.geolocation.getCurrentPosition(p=>{base={lat:p.coords.latitude,lon:p.coords.longitude};map?.setView([base.lat,base.lon],15);saveUI();render();setStatus('GPS-base satt. Trykk Live for kontinuerlig følging.');},()=>setStatus('Posisjonen kunne ikke hentes. Tillat GPS for nettstedet.'),{enableHighAccuracy:true,timeout:20000});};
-$('setBase').onclick=()=>{if(base)base=null;else if(map){const c=map.getCenter();base={lat:c.lat,lon:c.lng};}saveUI();render();};
+$('locate').onclick=()=>{if(!navigator.geolocation){setStatus('GPS ikke tilgjengelig.');return;}navigator.geolocation.getCurrentPosition(p=>{base={lat:p.coords.latitude,lon:p.coords.longitude};map?.setView([base.lat,base.lon],15);saveUI();render();setStatus('GPS-posisjon valgt. Klikk kartet for å bruke et annet referansepunkt, eller start Live.');},()=>setStatus('Posisjonen kunne ikke hentes. Tillat GPS for nettstedet.'),{enableHighAccuracy:true,timeout:20000});};
+$('setBase').onclick=()=>{};
 $('showAll').onclick=()=>{pauseFollowing();if(map)map.fitBounds(guide.map.bounds,{padding:[18,18]});};
 $('mapStyle').onchange=()=>{if(map){Object.values(layers).forEach(l=>{if(map.hasLayer(l))map.removeLayer(l);});(layers[$('mapStyle').value]||layers.topo).addTo(map);}saveUI();};
 $('riverToggle').onclick=()=>{const on=$('riverToggle').getAttribute('aria-pressed')!=='true';$('riverToggle').setAttribute('aria-pressed',String(on));if(map&&riverLayer){if(on)riverLayer.addTo(map);else map.removeLayer(riverLayer);}else if(on)loadRiver();};
-$('pointsToggle').onclick=()=>{const b=$('pointsToggle');b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'));scheduleRiverPoints();};
+$('pointsToggle').onclick=()=>{};
 $('retryRiver').onclick=()=>loadRiver();
 $('pointsShowAll').onclick=()=>$('showAll').click();
-$('placesToggle').onclick=()=>{$('placesToggle').setAttribute('aria-pressed',String($('placesToggle').getAttribute('aria-pressed')!=='true'));drawPlaces();};
+$('placesToggle').onclick=()=>{};
 for(const id of ['goal','method','access','radius','flow','clarity'])$(id).onchange=()=>{saveUI();render();};
 $('tripTime').onchange=()=>{followNow=false;if(!fromOsloInput($('tripTime').value)){setStatus('Ugyldig norsk dato/tid (eventuelt sommertidsovergang).');return;}render();};
 $('now').onclick=()=>{followNow=true;$('tripTime').value=localInput(new Date());render();};
 $('evening').onclick=()=>{followNow=false;const d=localInput(new Date()).slice(0,10)+'T19:00';$('tripTime').value=d;render();};
-$('refreshData').onclick=()=>{refreshWeather(true);refreshHydro();loadRiver();};
+$('refreshData').onclick=()=>{refreshWeather(true);loadRiver();};
 function closeViewer(){if($('lureViewer').open)$('lureViewer').close();if(viewerHistory){viewerHistory=false;history.back();}}
 $('closeLureViewer').onclick=closeViewer;$('lureViewer').onclick=e=>{if(e.target===$('lureViewer'))closeViewer();};$('lureViewer').addEventListener('cancel',e=>{e.preventDefault();closeViewer();});window.addEventListener('popstate',()=>{viewerHistory=false;if($('lureViewer').open)$('lureViewer').close();});
 document.addEventListener('click',e=>{const img=e.target.closest('.zoomable-lure');if(img){showLure(img.src,img.alt);return;}const b=e.target.closest('button');if(!b)return;if(b.dataset.riverPoint)selectRiverPoint(b.dataset.riverPoint,true,true);if(b.dataset.riverDetails)selectRiverPoint(b.dataset.riverDetails,false,true);if(b.dataset.riverFocus)selectRiverPoint(b.dataset.riverFocus,true);if(b.dataset.reach)selectReach(b.dataset.reach);if(b.dataset.focus)focusReach(b.dataset.focus);if(b.dataset.hour){followNow=false;$('tripTime').value=localInput(Date.now()+Number(b.dataset.hour)*3600000);render();}if(b.dataset.time){followNow=false;$('tripTime').value=localInput(b.dataset.time);render();}if(b.dataset.nav){const p=getLocation(guide.reaches.find(r=>r.id===b.dataset.nav));if(p)window.open('https://www.google.com/maps/dir/?api=1&destination='+p.lat+','+p.lon,'_blank','noopener');}});
@@ -244,6 +240,6 @@ $('exportLog').onclick=()=>download('Mistra-min-backup.json',JSON.stringify({ver
 $('exportTrack').onclick=()=>{if(!track.length){setStatus('Ingen GPS-spor å eksportere.');return;}download('Mistra-GPS-spor.gpx',M.gpx(track),'application/gpx+xml');};
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){if(liveActive){acquireWake();liveHud();}refreshWeather();}});
 window.addEventListener('pagehide',()=>{write(KEYS.track,track);if(liveActive)stopLive(false);});
-window.addEventListener('online',()=>{refreshWeather(true);refreshHydro();});window.addEventListener('offline',()=>setStatus('Offline: lokal guide og lagrede data. Bakgrunnskart kan mangle.'));
+window.addEventListener('online',()=>{refreshWeather(true);loadRiver();});window.addEventListener('offline',()=>setStatus('Offline: lokal guide og lagrede data. Bakgrunnskart kan mangle.'));
 setInterval(()=>{if(liveActive)liveHud();},10000);
 init();

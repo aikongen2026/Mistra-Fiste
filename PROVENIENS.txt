@@ -1,10 +1,4 @@
-Mistra Fiske 1.1.0
-Bygger videre på Mistra-Fiske-1.0.1-DOCKER-ONE-UPLOAD.zip.
-Sammenlignet med Vestfjella STABLE 1.3: kartbevegelse -> ny punktberegning.
-Mistra bruker NVE-elvelinje, ikke Vestfjellas innsjoepolygoner eller navn.
-Ingen nye fiskehølnavn, fangster, dybder eller nøkkelverdier er diktet opp.
-Hovedendringer: public/river-points.js, public/app.js, public/index.html,
-public/style.css, public/sw.js, server.js (NVE objekttype), test/river-points.test.js.
-Versjonsfelter og kontrollscript er oppdatert. Alle egne agnbilder er beholdt.
-Datakilde: https://kart.nve.no/enterprise/rest/services/Elvenett1/MapServer/2
-Dokumentasjon: https://leafletjs.com/reference.html
+Mistra Fiske 1.2.0
+Bygget videre på Mistra 1.1.0 / Fiste REV27-mønster.
+Kartpunkter genereres bare på levert NVE Mistra-elvelinje.
+Hydrologi: NVE stasjon 2.267.0 Mistra bru, HydAPI eller VEPS/HYDRA fallback.

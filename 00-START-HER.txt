@@ -1,13 +1,10 @@
-MISTRA FISKE 1.1.0 - OPPDATER EKSISTERENDE APP
+MISTRA FISKE 1.2.0 – LAST OPP I SAMME GITHUB-REPO
 
-Pakk ut. Last alt INNHOLDET inni prosjektmappen opp i samme Mistra-Fiste-repo.
-Behold undermappene. Dockerfile skal ligge rett ved siden av package.json.
-Trykk Commit changes. Render bygger som Docker med samme innstillinger.
-Versjonen i appen og /api/health skal bli 1.1.0.
+1. Pakk ut ZIP-filen.
+2. GitHub -> aikongen2026/Mistra-Fiste -> Add file -> Upload files.
+3. Dra inn ALT innholdet i denne prosjektmappen (Dockerfile skal ligge i roten).
+4. Commit changes.
+5. Render bygger automatisk. Behold Docker-oppsettet.
+6. Etter deploy skal /api/health vise version 1.2.0.
 
-NYTT: Elvepunkter følger synlig elvestrekning under panorering, zoom og Live.
-Elvepunkter er slått på fra start. Bruk Tilkomst: Alle og Ingen grense for
-å se alle beregnede punkter i det synlige kartutsnittet.
-Kildedata for elva må være hentet minst en gang.
-
-Ikke last opp ZIP-filen som en fil i repoet. Last opp de utpakkede filene.
+NVE-data: Ingen nøkkel er påkrevd for første automatiske forsøk. Appen bruker NVE VEPS/HYDRA uten nøkkel, og HydAPI hvis NVE_API_KEY allerede finnes.
