@@ -1,0 +1,16 @@
+# Keep local dependencies, caches and secrets out of Docker builds.
+.git
+.github
+**/node_modules
+.cache
+**/.cache
+**/.env
+**/.env.*
+**/.npmrc
+**/*.pem
+**/*.key
+**/*.log
+**/*.zip
+coverage
+.DS_Store
+Thumbs.db

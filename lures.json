@@ -1,0 +1,497 @@
+[
+  {
+    "id": "perch-crank",
+    "name": "Gul/oransje wobbler med m\u00f8rke striper",
+    "family": "wobbler",
+    "tags": [
+      "warm",
+      "contrast",
+      "perch"
+    ],
+    "image": "/lures/perch-crank.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "372ad43a-0f0e-42d6-9d4a-41e99944deb0(1).jpeg",
+    "cropPixels": [
+      407,
+      860,
+      785,
+      1055
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "trout-crank",
+    "name": "S\u00f8lv wobbler med \u00f8rretprikker",
+    "family": "wobbler",
+    "tags": [
+      "natural",
+      "silver",
+      "trout"
+    ],
+    "image": "/lures/trout-crank.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "372ad43a-0f0e-42d6-9d4a-41e99944deb0(1).jpeg",
+    "cropPixels": [
+      407,
+      1075,
+      785,
+      1288
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "perch-natural",
+    "name": "Gr\u00f8nn/gull wobbler med striper",
+    "family": "wobbler",
+    "tags": [
+      "natural",
+      "green",
+      "perch"
+    ],
+    "image": "/lures/perch-natural.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "372ad43a-0f0e-42d6-9d4a-41e99944deb0(1).jpeg",
+    "cropPixels": [
+      407,
+      1331,
+      785,
+      1528
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "gold-crank",
+    "name": "Gullfarget wobbler med skje",
+    "family": "wobbler",
+    "tags": [
+      "warm",
+      "gold"
+    ],
+    "image": "/lures/gold-crank.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "372ad43a-0f0e-42d6-9d4a-41e99944deb0(1).jpeg",
+    "cropPixels": [
+      407,
+      659,
+      785,
+      836
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "pink-crank",
+    "name": "Gul/rosa wobbler med skje",
+    "family": "wobbler",
+    "tags": [
+      "warm",
+      "contrast"
+    ],
+    "image": "/lures/pink-crank.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "372ad43a-0f0e-42d6-9d4a-41e99944deb0(1).jpeg",
+    "cropPixels": [
+      407,
+      408,
+      776,
+      596
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "firetiger-vibration",
+    "name": "Gr\u00f8nn/oransje vibrasjonsagn uten skje",
+    "family": "vibration",
+    "tags": [
+      "green",
+      "warm",
+      "contrast"
+    ],
+    "image": "/lures/firetiger-vibration.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "372ad43a-0f0e-42d6-9d4a-41e99944deb0(1).jpeg",
+    "cropPixels": [
+      6,
+      573,
+      385,
+      782
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "brown-minnow",
+    "name": "Brun/naturfarget minnow-wobbler",
+    "family": "wobbler",
+    "tags": [
+      "natural",
+      "dark",
+      "trout"
+    ],
+    "image": "/lures/brown-minnow.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "8638c412-9f68-4e76-a232-b0fa406122a4(1).jpeg",
+    "cropPixels": [
+      218,
+      211,
+      648,
+      420
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "silver-minnow",
+    "name": "S\u00f8lv minnow med rosa rygg",
+    "family": "wobbler",
+    "tags": [
+      "natural",
+      "silver"
+    ],
+    "image": "/lures/silver-minnow.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "8638c412-9f68-4e76-a232-b0fa406122a4(1).jpeg",
+    "cropPixels": [
+      218,
+      715,
+      648,
+      911
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "trout-minnow",
+    "name": "Brun\u00f8rretm\u00f8nstret minnow",
+    "family": "wobbler",
+    "tags": [
+      "natural",
+      "trout",
+      "warm"
+    ],
+    "image": "/lures/trout-minnow.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "8638c412-9f68-4e76-a232-b0fa406122a4(1).jpeg",
+    "cropPixels": [
+      227,
+      1446,
+      648,
+      1636
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "gold-minnow",
+    "name": "Gull minnow med skje",
+    "family": "wobbler",
+    "tags": [
+      "warm",
+      "gold"
+    ],
+    "image": "/lures/gold-minnow.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "8638c412-9f68-4e76-a232-b0fa406122a4(1).jpeg",
+    "cropPixels": [
+      227,
+      1683,
+      648,
+      1882
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "copper-spoon",
+    "name": "Kobber/r\u00f8d skjesluk, merket 18 g",
+    "family": "spoon",
+    "tags": [
+      "warm",
+      "copper",
+      "contrast"
+    ],
+    "image": "/lures/copper-spoon.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": 18,
+    "buoyancy": "unknown",
+    "sourcePhoto": "f15e8836-11af-4b14-9af8-644ff43dac55(1).jpeg",
+    "cropPixels": [
+      142,
+      786,
+      714,
+      1006
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "silver-spoon",
+    "name": "Smal s\u00f8lv/svart metallsluk",
+    "family": "spoon",
+    "tags": [
+      "natural",
+      "silver",
+      "dark"
+    ],
+    "image": "/lures/silver-spoon.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "482bb468-f335-4fc4-b3ef-af6b4b7a1d09(1).jpeg",
+    "cropPixels": [
+      72,
+      161,
+      309,
+      701
+    ],
+    "sourceDimensions": [
+      2048,
+      946
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "orange-spoon",
+    "name": "Gul/oransje skjesluk med svarte prikker",
+    "family": "spoon",
+    "tags": [
+      "warm",
+      "contrast"
+    ],
+    "image": "/lures/orange-spoon.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "f19b0ef2-b084-49e9-9eeb-03d395ea8072(1).jpeg",
+    "cropPixels": [
+      16,
+      1210,
+      861,
+      1481
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "gold-spinner",
+    "name": "Gullspinner med r\u00f8de prikker",
+    "family": "spinner",
+    "tags": [
+      "warm",
+      "gold",
+      "contrast"
+    ],
+    "image": "/lures/gold-spinner.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "efca4b1b-8558-4f76-a041-a636a1aab7f6(1).jpeg",
+    "cropPixels": [
+      265,
+      674,
+      714,
+      942
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "dark-spinner",
+    "name": "Svart/gul spinner",
+    "family": "spinner",
+    "tags": [
+      "dark",
+      "contrast"
+    ],
+    "image": "/lures/dark-spinner.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "efca4b1b-8558-4f76-a041-a636a1aab7f6(1).jpeg",
+    "cropPixels": [
+      289,
+      1511,
+      629,
+      1659
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "silver-spinner",
+    "name": "S\u00f8lvspinner med r\u00f8de prikker",
+    "family": "spinner",
+    "tags": [
+      "silver",
+      "contrast"
+    ],
+    "image": "/lures/silver-spinner.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "efca4b1b-8558-4f76-a041-a636a1aab7f6(1).jpeg",
+    "cropPixels": [
+      236,
+      403,
+      747,
+      668
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "copper-streamer",
+    "name": "Kobberfarget streamer",
+    "family": "fly",
+    "tags": [
+      "warm",
+      "copper"
+    ],
+    "image": "/lures/copper-streamer.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "64326546-6641-4f6c-8fa4-e34ddff648f2(1).jpeg",
+    "cropPixels": [
+      57,
+      1434,
+      374,
+      1724
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  },
+  {
+    "id": "white-streamer",
+    "name": "Lys streamer",
+    "family": "fly",
+    "tags": [
+      "natural",
+      "silver"
+    ],
+    "image": "/lures/white-streamer.jpg",
+    "owned": true,
+    "lengthCm": null,
+    "weightG": null,
+    "buoyancy": "unknown",
+    "sourcePhoto": "64326546-6641-4f6c-8fa4-e34ddff648f2(1).jpeg",
+    "cropPixels": [
+      634,
+      1307,
+      792,
+      1772
+    ],
+    "sourceDimensions": [
+      946,
+      2048
+    ],
+    "verifiedBy": "Visuell identifikasjon i brukerens foto; ikke modellidentifikasjon",
+    "caveat": "Lengde, flyteevne og arbeidsdybde er ikke fastsl\u00e5tt fra bildet. M\u00e5l agnet og kontroller gangen ved land."
+  }
+]
